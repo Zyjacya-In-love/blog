@@ -45,6 +45,7 @@ deploy:
   type: git
   repository: git@github.com:Simshang/Simshang.github.io.git
   # branch: master
+  #
 ```
 
 最后使用`hexo d`进行部署
