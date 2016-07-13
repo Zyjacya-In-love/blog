@@ -11,9 +11,16 @@ tags:
 
 <!--more-->
 
->   条件:
-    安装`mysql-client`,使用命令`apt-get install libmysqlclient-dev`
-    安装`MySQL-python (1.2.5)`,使用命令`pip install mysql-python`
+- 操作系统：`Centos6.5`
+
+### 环境配置
+
+- 安装一些扩展库：
+`yum -y install rpm-build gcc-c++ mysql-devel python-devel`
+
+- pip安装mysql-python
+`pip install mysql-python`
+
     
 ### 连接数据库
     

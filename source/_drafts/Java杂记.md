@@ -1,5 +1,5 @@
 ---
-title: Java
+title: Java杂记
 tags:
 - Java
 
