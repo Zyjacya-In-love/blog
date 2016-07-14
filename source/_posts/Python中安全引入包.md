@@ -21,16 +21,16 @@ def hello():
 print "a.py"
 print hello()
 print b.hi()
+#
 ```
 
 在`b.py`：
 
 ```python
-
 import a
 def hi():
   print "hi"
-  
+# 
 ```
 
 
@@ -43,5 +43,5 @@ In b.py:
 def cause_a_to_do_something():
     import a
     a.do_something()
-
+#
 ```
