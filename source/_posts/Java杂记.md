@@ -6,7 +6,7 @@ tags:
 date: 2016-07-14 17:34:55
 ---
 
-这篇文章用来记录学习Java过程中的理解和感触,最近负责用Java写一个文本提取的模块，在这个过程中用到了很多jar包，体会到了java作为一个成熟的工业级语言的强大和开发效率的优势，于是准备好好学习一下这门编程语言。
+这篇文章用来记录学习Java过程中的理解和感触,最近负责用Java写一个文本提取的模块，在这个过程中用到了很多jar包，体会到了java作为一个成熟的工业级语言的强大和开发效率的优势，于是准备好好学习一下这门编程语言,学习书籍为`Java编程思想`。
 
 <!--more-->
 
@@ -40,6 +40,58 @@ date: 2016-07-14 17:34:55
 - 对于赋值操作, 当对象进行赋值的时候, 实际上是对对象的引用, 也就是说将左值指向右值的堆内存地址, 相当于给右边的对象起了一个别名, 它们实际上操作的是同一块内存空间
 
 - 对象在方法中的传递, 也是传递了一个引用, 实际上操作的是传递的真实对象, 换句话说, 方法操作的是被调用方法外面的对象.
+
+### 短路问题
+
+在Java的逻辑运算中, 一旦可以准确无误的确定整个表达式的值, 就不再进行运算了, 比如与运算中有`false`
+
+### 类型转换
+
+`窄化转换`也就是说能容纳更多的数据类型转换为容纳信息更少的数据类型, 这是十分危险的事情, 必须`显示`进行转换, 一般来说表达式中出现的最大的数据类型决定了表达式最终结果的类型
+
+- 截尾: 在将`float`或者`double`转为`int`时, 总是进行截尾
+
+```java
+public class CastingNumbers {
+  public static void main(String[] args) {
+    double above = 0.7, below = 0.4;
+    float fabove = 0.7f, fbelow = 0.4f;
+    print("(int)above: " + (int)above);
+    print("(int)below: " + (int)below);
+    print("(int)fabove: " + (int)fabove);
+    print("(int)fbelow: " + (int)fbelow);
+  }
+} 
+/* Output:
+(int)above: 0
+(int)below: 0
+(int)fabove: 0
+(int)fbelow: 0
+*/
+
+```
+
+- 四舍五入: `java.lang.Math`中的round()方法实现
+
+```java
+public class RoundingNumbers {
+  public static void main(String[] args) {
+    double above = 0.7, below = 0.4;
+    float fabove = 0.7f, fbelow = 0.4f;
+    print("Math.round(above): " + Math.round(above));
+    print("Math.round(below): " + Math.round(below));
+    print("Math.round(fabove): " + Math.round(fabove));
+    print("Math.round(fbelow): " + Math.round(fbelow));
+  }
+} 
+/* Output:
+Math.round(above): 1
+Math.round(below): 0
+Math.round(fabove): 1
+Math.round(fbelow): 0
+*/
+
+```
 
 ### Javadoc:API文档
 
