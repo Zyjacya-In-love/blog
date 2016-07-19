@@ -19,4 +19,8 @@ tags:
 >   报错信息 : TypeError: ‘NoneType’ object is not iterable
 
 -   在没有return语句时，python默认会返回None,一般是函数返回值为None，并被赋给了多个变量,注意函数返回值一定要考虑到条件分支的覆盖.
+
+>   报错信息 : AttributeError: 'str' object has no attribute 'time'
+
+-   缩进混乱或者定义了`time`的重名变量和方法等,产生冲突, 更改相应的变量方法名
     
