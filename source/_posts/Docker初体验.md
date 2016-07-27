@@ -51,6 +51,18 @@ tags:
      https://docs.docker.com/engine/userguide/ 
     
     ```
+### docker常用命令
 
+- `docker version` 查看docker版本
+
+- `docker command [-- help]` 查看某个命令的使用方法
+
+### 容器
+
+`docker ps` 查看正在运行的容器
+
+### 镜像
+
+- `docker images` 查看镜像
 
 
