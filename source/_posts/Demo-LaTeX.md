@@ -1,6 +1,6 @@
 ---
 title: Demo LaTeX
-date: 2015-9-21 20:53:35
+date: 2015-12-21 20:53:35
 tags: 
 - LaTeX
 
@@ -9,6 +9,8 @@ tags:
 最近在学习机器学习和神经网络的一些知识, 在用Markdown做笔记的时候, 发现公式用到LaTeX十分方便, 写篇文章记录在学习过程中的常用的LaTeX公式和用法, 因为本博客支持MathJax, `MathJax`是一款运行在浏览器中的开源的数学符号渲染引擎，使用MathJax可以方便的在浏览器中显示数学公式，MathJax可以解析`Latex`、`MathML`和`ASCIIMathML`的标记语言。
 
 <!--more-->
+
+> [Markdown文件](https://github.com/Simshang/blog/blob/master/source/_posts/Demo-LaTeX.md)
 
 ## **基本概念**
 
@@ -72,7 +74,28 @@ tags:
   `\sum_{k=1}^n\frac{1}{k}` : $\sum_{k=1}^n\frac{1}{k}$
 
   
-  - 二重积分：$\iint$
+### **多重积分**
+
+- 对于多重积分，不要使用`\int\int`此类的表达，应该使用`\iint`,` \iiint`等特殊形式。效果如下：
+
+$$
+\begin{array}{cc}
+\mathrm{Bad} & \mathrm{Better} \\\\
+\hline \\\\
+\int\int_S f(x)\,dy\,dx & \iint_S f(x)\,dy\,dx \\\\
+\int\int\int_V f(x)\,dz\,dy\,dx & \iiint_V f(x)\,dz\,dy\,dx
+\end{array}
+$$
+
+- 在微分前应该使用`\`,来增加些许空间，否则$\TeX$会将微分紧凑地排列在一起。如下：
+
+$$
+\begin{array}{cc}
+\mathrm{Bad} & \mathrm{Better} \\\\
+\hline \\\\
+\iiint_V f(x)dz dy dx & \iiint_V f(x)\,dz\,dy\,dx
+\end{array}
+$$
   
 ### **特殊函数与符号**
 
@@ -108,7 +131,7 @@ tags:
     `\epsilon \varepsilon` : $ \epsilon \varepsilon$
     `\phi \varphi` : $\phi \varphi$
 
-- 使用[Detexify](http://detexify.kirelabs.org/classify.html)，你可以在网页上画出符号，Detexify会给出相似的符号及其代码。这是一个方便的功能，但是不能保证它给出的符号可以在MathJax中使用，你可以参考[supported-latex-commands](http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands)确定MathJax是否支持此符号。
+- 使用[Detexify](http://detexify.kirelabs.org/classify.html)在网页上画出符号，Detexify会给出相似的符号及其代码但是不能保证它给出的符号可以在MathJax中使用，你可以参考[supported-latex-commands](http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands)确定MathJax是否支持此符号。
   
 ### **空格 : 美化公式**
 
@@ -172,8 +195,168 @@ tags:
 6. 使用`\mathfrak`显示Fraktur字母（一种德国字体）
    `\mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$, $\mathfrak{abcdefghijklmnopqrstuvwxyz}`
    $\mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$,$\mathfrak{abcdefghijklmnopqrstuvwxyz}$
-   
 
+### **方程组**
+- 使用`\begin{array} ... \end{array}`与`\left\{…\right.`配合，表示方程组
+
+
+
+- 使用 `\being{aligned} .. \end{aligned}`
+
+$$
+\begin{aligned}
+\dot{x} & = \sigma(y-x) \\\
+\dot{y} & = \rho x - y - xz \\\
+\dot{z} & = -\beta z + xy
+\end{aligned}
+$$
+
+- 使用 `\being{case} .. \end{case}`
+
+$$
+\begin{cases}
+a_1x+b_1y+c_1z=d_1 \\\
+a_2x+b_2y+c_2z=d_2 \\\
+a_3x+b_3y+c_3z=d_3
+\end{cases}
+$$
+
+- 对齐方程组中的` = `号, 注意`{`要转义,'\\{'
+
+$$ \left\\{
+     \begin{aligned} 
+       a_1x+b_1y+c_1z &=d_1+e_1 \\\
+       a_2x+b_2y&=d_2 \\\ 
+       a_3x+b_3y+c_3z &=d_3 
+\end{aligned} 
+\right. 
+$$
+
+- 如果要对齐 `= `号和`项`，可以使用`\being{array}{列样式} .. \end{array}`
+
+$$
+\left\\{
+\begin{array}{ll}
+a_1x+b_1y+c_1z &=d_1+e_1 \\\
+a_2x+b_2y &=d_2 \\\
+a_3x+b_3y+c_3z &=d_3 
+\end{array} 
+\right.
+$$
+
+### 公式标记与引用
+
+- 使用`\tag{tag}`来标记公式，如果想在之后引用该公式，则还需要加上`\label{label}`在`\tag`之后，如：
+- 需要`\*`对标签`*`进行转义
+
+$$
+ a := x^2-y^3 \tag{\*}\label{\*}
+$$
+
+$$
+ a := x^2-y^3 \tag{2.1}\label{2.1}
+$$
+
+- 为了引用公式，可以使用`\eqref{rlabel}`，如：
+
+$$a+y^3 \stackrel{\eqref{\*}}= x^2$$
+
+$$a+y^3 \stackrel{\eqref{2.1}}= x^2$$
+
+- 通过超链接可以跳转到被引用公式位置。
+   
+### **矩阵**
+- 使用`$$\begin{matrix}…\end{matrix}$$`表示矩阵，矩阵的行之间使用`\\\`分隔，列之间使用`&`分隔。
+    
+- 效果如下 :
+
+$$
+        \begin{matrix}
+        1 & x & x^2 \\\
+        1 & y & y^2 \\\
+        1 & z & z^2 \\\
+        \end{matrix}
+$$
+
+- **加括号**
+如果要对矩阵加括号，可以像上文中提到的一样，使用`\left`与`\right`配合表示括号符号。也可以使用特殊的`matrix`。即替换`\begin{matrix}...\end{matrix}`中的matrix为`pmatrix`，`bmatrix`，`Bmatrix`，`vmatrix`,`Vmatrix`
+
+`pmatrix` : $\begin{pmatrix}1&2\\\3&4\\\ \end{pmatrix}$ 
+`bmatrix` : $\begin{bmatrix}1&2\\\3&4\\\ \end{bmatrix}$ 
+`Bmatrix` : $\begin{Bmatrix}1&2\\\3&4\\\ \end{Bmatrix}$ 
+`vmatrix` : $\begin{vmatrix}1&2\\\3&4\\\ \end{vmatrix}$ 
+`Vmatrix` : $\begin{Vmatrix}1&2\\\3&4\\\ \end{Vmatrix}$ 
+
+- **省略元素**  使用`\cdots` : $\cdots$ `\ddots` : $\ddots$  `\vdots` : $\vdots$来省略矩阵中的元素
+
+$$
+    \begin{pmatrix}
+         1 & a_1 & a_1^2 & \cdots & a_1^n \\\
+         1 & a_2 & a_2^2 & \cdots & a_2^n \\\
+         \vdots  & \vdots& \vdots & \ddots & \vdots \\\
+         1 & a_m & a_m^2 & \cdots & a_m^n 
+    \end{pmatrix}
+$$
+
+### **增广矩阵** : 增广矩阵需要使用前面的`array`来实现
+
+$$ \left[
+      \begin{array}{cc|c}
+        1&2&3\\\
+        4&5&6
+      \end{array}
+    \right]
+$$
+
+### **对齐公式**
+
+- 使用形如`\begin{align}…\end{align}`的格式，使用&来指示需要对齐的位置
+
+$$
+    \begin{align}
+    \sqrt{37} & = \sqrt{\frac{73^2-1}{12^2}} \\\
+     & = \sqrt{\frac{73^2}{12^2}\cdot\frac{73^2-1}{73^2}} \\\
+     & = \sqrt{\frac{73^2}{12^2}}\sqrt{\frac{73^2-1}{73^2}} \\\
+     & = \frac{73}{12}\sqrt{1 - \frac{1}{73^2}} \\\
+     & \approx \frac{73}{12}\left(1 - \frac{1}{2\cdot73^2}\right)
+    \end{align}
+$$
+
+### **分类表达式**
+
+- 定义函数时分情况给出表达式，使用`\begin{cases}…\end{cases}`
+- 使用`\\\`来分类，使用`&`指示需要对齐的位置
+
+$$
+ f(n) =
+    \begin{cases}
+    n/2,  & \text{if $n$ is even} \\\\[4ex]
+    3n+1, & \text{if $n$ is odd}
+    \end{cases}
+$$
+
+- `[4ex]`控制分类之间的垂直间隔, 这里要用`\\\\`转义
+
+
+### **表格**
+
+- 使用`$$\begin{array}{列样式}...\end{array}$$`创建表格
+- 列样式使用`clr`表示居中，左，右对齐
+- 使用`|`表示一条竖线
+- 使用`\\\\`分隔行，使用`&`分隔列
+- 使用`\hline`在本行前加入一条直线
+
+$$
+    \begin{array}{c|lcr}
+    n & \text{Left} & \text{Center} & \text{Right} \\\\
+    \hline
+    1 & 0.24 & 1 & 125 \\\\
+    2 & -1 & 189 & -8 \\\\
+    3 & -20 & 2000 & 1+10i \\\\
+    \end{array}
+$$
+
+- 复杂列表
 
 ### **希腊字母**
 
@@ -207,6 +390,11 @@ tags:
 
 ### **重音符号** : `\hat{A}` : $ \hat{A} $
 
+- 单字符
+  `\hat` ：$\hat x$
+- 多字符
+  `\widehat` : $\widehat {xy}$
+
 ![重音符号](/img/Demo-LaTeX/latex1.jpg)
 
 ### **二元关系** : `a\ll{b}` : $ a\ll{b} $
@@ -237,7 +425,41 @@ tags:
 
 ![其他符号](/img/Demo-LaTeX/latex8.jpg)
 
+## **注意事项**
+
+### 不要在再指数或者积分中使用 `\frac`
 
 
+- 在指数或者积分表达式中使用`\frac`会使表达式看起来不清晰，应该使用一个水平的`/`来代替
 
+
+### 使用 \mid 代替 | 作为分隔符
+符号|作为分隔符时有排版空间大小的问题，应该使用\mid代替。效果如下：
+
+$$
+\begin{array}
+\mathrm{Bad} & \mathrm{Better} \\\
+\hline \\\
+{x|x^2\in\Bbb Z} & {x\mid x^2\in\Bbb Z} \\\
+\end{array}
+$$
+
+### 连分数
+书写连分数表达式时，请使用`\cfrac`代替`\frac`或者`\over`,两者效果对比如下：
+
+$$
+x = a_0 + \cfrac{1^2}{a_1
+          \+ \cfrac{2^2}{a_2
+          \+ \cfrac{3^2}{a_3 + \cfrac{4^4}{a_4 + \cdots}}}} \tag{\cfrac}
+$$
+$$
+x = a_0 + \frac{1^2}{a_1
+         \+ \frac{2^2}{a_2
+          \+ \frac{3^2}{a_3 + \frac{4^4}{a_4 + \cdots}}}} \tag{\frac}
+$$
+
+> **转义**
+  一些MathJax使用的特殊字符，可以使用`\`或者`\\`转义为原来的含义。如`\$`表示`$`，`\\_`表示下划线。
+- 注意: 换行和方程组的开始`{`等, 常常需要转义, 用`\`或者`\\`或者`\\\`或者`\\\\`
+[Markdown文件](https://github.com/Simshang/blog/blob/master/source/_posts/Demo-LaTeX.md)
 
