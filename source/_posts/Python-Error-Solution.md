@@ -23,4 +23,7 @@ tags:
 >   报错信息 : AttributeError: 'str' object has no attribute 'time'
 
 -   缩进混乱或者定义了`time`的重名变量和方法等,产生冲突, 更改相应的变量方法名
-    
+
+>   报错信息 : Unresolved reference issue in PyCharm
+
+-   设置root目录 [stackoverflow](http://stackoverflow.com/questions/21236824/unresolved-reference-issue-in-pycharm) 
