@@ -90,7 +90,7 @@ define predict(model,test_images):
 
 ### 交叉验证法
 
-请看另一篇文章, [模型的评估](), 在这里我们用的5折交叉验证法
+请看另一篇文章, [模型的评估](http://simtalk.cn/2016/04/15/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0/), 在这里我们用的5折交叉验证法
 
 ![](/img/kNN-in-CS231n/cv5.png)
 

@@ -10,7 +10,7 @@ tags:
 
 <!--more-->
 
-> [Markdown文件](https://github.com/Simshang/blog/blob/master/source/_posts/Demo-LaTeX.md)
+> 本篇博客的[Markdown文件](https://github.com/Simshang/blog/blob/master/source/_posts/Demo-LaTeX.md)
 
 ## **基本概念**
 
