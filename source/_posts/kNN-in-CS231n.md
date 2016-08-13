@@ -2,10 +2,9 @@
 title: kNN in CS231n
 date: 2016-05-22 22:30:48
 tags:
-
-- 机器学习
-- 计算机视觉
-
+  - cs231n
+categories:
+  - 机器学习
 ---
 
 最近在学习斯坦福大学李飞飞团队的公开课`CS231n- Convolutional Neural Networks for Visual Recognition`, 这篇文章介绍了课程中kNN算法(k-最邻近算法)实现图像分类的一些细节及Python的代码实现.
