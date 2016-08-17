@@ -21,6 +21,21 @@ tags:
 - pip安装mysql-python
 `pip install mysql-python`
 
+### Windows64位编译安装`MySQLdb`
+
+1. 安装 `Microsoft Visual C++ Compiler Package for Python 2.7` [下载链接](https://www.microsoft.com/en-us/download/details.aspx?id=44266)
+
+2. 安装 `MySQL Connector C 6.0.2`, [下载链接](https://dev.mysql.com/downloads/connector/c/6.0.html)
+
+3. 下载 `MySQL-python 1.2.5` 源码包, [下载链接](https://pypi.python.org/pypi/MySQL-python/1.2.5)
+
+4. 解压源码包后，修改 `site.cfg` 文件
+
+    - 如果你是在32 位系统上部署，那么通过pip install 安装MySQL-python 1.2.5 只需进行上面的依赖包安装即可。但在 64 位环境中，就会提示“Cannot open include file: 'config-win.h'” 的错误, 原因就是 site.cfg 中写的 MySQL Connector C 为32 位版本。
+    
+    修改为`connector = C:\Program Files\MySQL\MySQL Connector C 6.1`
+      
+5. 运行 `python setup.py install` 即可安装完成
     
 ### 连接数据库
     

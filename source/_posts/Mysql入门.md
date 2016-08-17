@@ -7,8 +7,6 @@ tags:
 第一次接触Mysql , 将一些基本操作记下来
 <!--more-->
 
-
-
 ### 查看MySQL的状态
 
 `service mysqld status`
@@ -17,15 +15,11 @@ tags:
 
 mysql ： `show global variables like 'port'`
 
-
-
 ### MySQLworkbench 登录远程数据库
 
 - win10登录
 
 `mysql -h 192.168.140.184 -u tianchi -p`
-
-
 
 - root用户不能远程登录，只能本机登录
 
@@ -35,19 +29,13 @@ mysql ： `show global variables like 'port'`
 
 - 创建远程登录账号`tianchi`并设置密码为`password`
 
-
-
 `DELETE FROM user WHERE User="root" and Host="localhost";`
 
 - 删除用户
 
-
-
 `GRANT ALL PRIVILEGES ON *.* TO username@localhost IDENTIFIED BY 'password' WITH GRANT OPTION;`
 
 - 添加一个用户username并授权通过本地访问，密码“password”
-
-
 
 `Flush privileges;`
 
@@ -61,47 +49,31 @@ mysql ： `show global variables like 'port'`
 
 ### 设置防火墙允许3306端口
 
-1. ``
-
-
-
 ### 安装MySQL
 
 `yum -y install mysql-server`
 
 - 安装MySQL
 
-
-
 `chkconfig mysqld on`
 
 - 查看开机启动
-
-
 
 `service mysqld start`
 
 - 启动MySQL服务
 
-
-
 `mysql -u root`
 
 - 无密码登录
-
-
 
 `select user,host,password from mysql.user;`
 
 - 查看用户密码
 
-
-
 `set password for root@localhost=password('password');`
 
 - 设置root密码
-
-
 
 ### 登录MySQL
 
@@ -109,61 +81,41 @@ mysql ： `show global variables like 'port'`
 
 - 用新密码登录
 
-
-
 `select user();`
 
 - 查看用户
-
-
 
 `SELECT VERSION();`
 
 - 查看版本
 
-
-
 `SHOW VARIABLES WHERE Variable_name = 'port'; `
 
 - 查看端口号
-
-
 
 `SHOW VARIABLES WHERE Variable_name = 'hostname';`
 
 - 查看hostname
 
-
-
 `show databases;`
 
 - 查看数据库
-
-
 
 `use tianchi;`
 
 - 进入`tianchi`数据库
 
-
-
 `show tables;`
 
 - 查看数据库中的表 
-
-
 
 `create/drop database database_name;`
 
 - 创建或者删除一个数据库
 
-
-
 `show columns from table_name;`
 
 - 查看表结构
-
-
 
 ### MySQL服务
 
@@ -171,11 +123,9 @@ mysql ： `show global variables like 'port'`
 
 - 重启MySQL
 
-
-
 ### 代码：【登录 --> 建表】
 
-shang@Lenovo-G470:~$` mysql -h localhost -u root`
+$ ` mysql -h localhost -u root`
 
 ```
 
@@ -185,11 +135,7 @@ Your MySQL connection id is 37
 
 Server version: 5.5.43-0ubuntu0.14.04.1 (Ubuntu)
 
-
-
 Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
-
-
 
 Oracle is a registered trademark of Oracle Corporation and/or its
 
@@ -197,13 +143,11 @@ affiliates. Other names may be trademarks of their respective
 
 owners.
 
-
-
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 ```
 
-mysql> `show databases;`
+$ mysql> `show databases;`
 
 ```
 
@@ -225,7 +169,7 @@ mysql> `show databases;`
 
 ```
 
-mysql> `exit`
+$ mysql> `exit`
 
 ```
 
@@ -233,7 +177,7 @@ Bye
 
 ```
 
-shang@Lenovo-G470:~$ `mysql -V`
+$ `mysql -V`
 
 ```
 
@@ -241,7 +185,7 @@ mysql  Ver 14.14 Distrib 5.5.43, for debian-linux-gnu (x86_64) using readline 6.
 
 ```
 
-shang@Lenovo-G470:~$ `mysql -h localhost -u root`
+$ `mysql -h localhost -u root`
 
 ```
 
@@ -251,11 +195,7 @@ Your MySQL connection id is 38
 
 Server version: 5.5.43-0ubuntu0.14.04.1 (Ubuntu)
 
-
-
 Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
-
-
 
 Oracle is a registered trademark of Oracle Corporation and/or its
 
@@ -263,13 +203,11 @@ affiliates. Other names may be trademarks of their respective
 
 owners.
 
-
-
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 ```
 
-mysql> `help;`
+$ mysql> `help;`
 
 ```
 
@@ -284,8 +222,6 @@ For developer information, including the MySQL Reference Manual, visit:
 To buy MySQL Enterprise support, training, or other products, visit:
 
    https://shop.mysql.com/
-
-
 
 List of all MySQL commands:
 
@@ -345,7 +281,7 @@ For server side help, type 'help contents'
 
 ```
 
-mysql> `create database university default character set utf8 collate utf8_general_ci;`
+$ mysql> `create database university default character set utf8 collate utf8_general_ci;`
 
 ```
 
@@ -353,7 +289,7 @@ Query OK, 1 row affected (0.00 sec)
 
 ```
 
-mysql> `show databases;`
+$ mysql> `show databases;`
 
 ```
 
@@ -377,7 +313,7 @@ mysql> `show databases;`
 
 ```
 
-mysql> `use university;`
+$ mysql> `use university;`
 
 ```
 
@@ -385,7 +321,7 @@ Database changed
 
 ```
 
-mysql> `show tables;`
+$ mysql> `show tables;`
 
 ```
 
@@ -403,7 +339,7 @@ mysql> `show tables;`
 
 ```
 
-mysql> `create table student(name varchar (10),age numeric (10));`
+$ mysql> `create table student(name varchar (10),age numeric (10));`
 
 ```
 
@@ -411,7 +347,7 @@ Query OK, 0 rows affected (0.00 sec)
 
 ```
 
-mysql> `show tables;`
+$ mysql> `show tables;`
 
 ```
 
@@ -431,7 +367,7 @@ mysql> `show tables;`
 
 ```
 
-mysql> `show columns from student;`
+$ mysql> `show columns from student;`
 
 ```
 
@@ -451,7 +387,7 @@ mysql> `show columns from student;`
 
 ```
 
-mysql> `show columns from department;`
+$ mysql> `show columns from department;`
 
 ```
 
@@ -473,7 +409,7 @@ mysql> `show columns from department;`
 
 ```
 
-mysql> `insert into department values("yifulou","number25",5000);`
+$ mysql> `insert into department values("yifulou","number25",5000);`
 
 ```
 
@@ -481,7 +417,7 @@ Query OK, 1 row affected (0.00 sec)
 
 ```
 
-mysql> `insert into student values("shangyan",20);`
+$ mysql> `insert into student values("shangyan",20);`
 
 ```
 
@@ -489,7 +425,7 @@ Query OK, 1 row affected (0.00 sec)
 
 ```
 
-mysql> `select *from department;`
+$ mysql> `select *from department;`
 
 ```
 
@@ -505,9 +441,10 @@ mysql> `select *from department;`
 
 1 row in set (0.00 sec)
 
+
 ```
 
-mysql> `select *from student;`
+$ mysql> `select *from student;`
 
 ```
 
@@ -522,5 +459,6 @@ mysql> `select *from student;`
 +----------+------+
 
 1 row in set (0.00 sec)
+
 
 ```

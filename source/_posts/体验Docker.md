@@ -15,6 +15,8 @@ categories:
 
 ### **Docker简介**
 
+![](/img/体验Docker/docker1.png)
+
 `Docker`项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker的基础是 `Linux容器（LXC）`等技术。在 LXC 的基础上 Docker 进行了进一步的封装，让用户不需要去关心容器的管理，使得操作更为简便。用户操作 Docker 的容器就像操作一个快速轻量级的虚拟机一样简单。
 
 - [Docker on Github](https://github.com/docker/docker)
@@ -22,6 +24,8 @@ categories:
 
 
 ### **基本概念**
+
+![](/img/体验Docker/docker2.png)
 
 > 镜像（Image）: 是一个只读模板
 
@@ -59,7 +63,7 @@ categories:
    3. 检查是否安装成功
     `docker run hello-world`
     
-### Centos6.5 安装
+### [Centos6.5 安装](https://docs.docker.com/engine/installation/linux/centos/)
     
    1. yum添加源
     

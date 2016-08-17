@@ -86,6 +86,8 @@ categories:
 
 ![](/img/用Big-O进行算法分析/bigO3.JPG)
 
+![](/img/用Big-O进行算法分析/bigo.png)
+
 ### **Big-O计算运行时间步骤**
 
 1. 确定决定算法运行时间的组成步骤。
