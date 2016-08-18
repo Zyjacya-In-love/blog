@@ -13,7 +13,7 @@ tags:
 
 - 操作系统：`Centos6.5`
 
-### 环境配置
+### **环境配置**
 
 - 安装一些扩展库：
 `yum -y install rpm-build gcc-c++ mysql-devel python-devel`
@@ -21,11 +21,11 @@ tags:
 - pip安装mysql-python
 `pip install mysql-python`
 
-### Windows64位编译安装`MySQLdb`
+### **Windows64位编译安装`MySQLdb`**
 
 1. 安装 `Microsoft Visual C++ Compiler Package for Python 2.7` [下载链接](https://www.microsoft.com/en-us/download/details.aspx?id=44266)
 
-2. 安装 `MySQL Connector C 6.0.2`, [下载链接](https://dev.mysql.com/downloads/connector/c/6.0.html)
+2. 安装 `MySQL Connector C 6.0.2 Windows (x86, 64-bit), MSI Installer`, [下载链接](https://dev.mysql.com/downloads/file/?id=378025)
 
 3. 下载 `MySQL-python 1.2.5` 源码包, [下载链接](https://pypi.python.org/pypi/MySQL-python/1.2.5)
 
@@ -33,11 +33,18 @@ tags:
 
     - 如果你是在32 位系统上部署，那么通过pip install 安装MySQL-python 1.2.5 只需进行上面的依赖包安装即可。但在 64 位环境中，就会提示“Cannot open include file: 'config-win.h'” 的错误, 原因就是 site.cfg 中写的 MySQL Connector C 为32 位版本。
     
-    修改为`connector = C:\Program Files\MySQL\MySQL Connector C 6.1`
+    修改为`connector = C:\Program Files\MySQL\MySQL Connector C 6.0.2`
       
 5. 运行 `python setup.py install` 即可安装完成
+
+    - 验证安装成功
+    运行`python`
+    $>>> `import MySQLdb`
+    $>>> `print MySQLdb.__version__`
+    1.2.5
+
     
-### 连接数据库
+### **连接数据库**
     
 ```python
 # -*- coding: utf-8 -*-
@@ -74,7 +81,7 @@ finally:
 
 >   程序输出:`Database version : 5.1.73`
 
-### 基本操作
+### **基本操作**
 
 1. 查询
 
@@ -123,7 +130,7 @@ with con:
     # output:
 ```
 
-2. 创建表与插入
+2. **创建表与插入**
 
 ```
 # -*- coding: utf-8 -*-
@@ -157,7 +164,7 @@ with con:
     # output: nothing
 ```
 
-3. 增加记录
+3. **增加记录**
 
 ```python
 # -*- coding: utf-8 -*-
@@ -199,7 +206,7 @@ except mdb.Error, e:
 ```
 
 
-### 总结
+### **总结**
 以上就是用Python对Mysql进行最基本的操作,写一些基本数据处理的脚本还是很方便的,不足之处请指正.
 
 

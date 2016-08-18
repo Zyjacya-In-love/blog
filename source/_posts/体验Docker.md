@@ -45,6 +45,7 @@ categories:
 > 在本地创建好的镜像可以使用`push`上传到公有或者私有仓库,这样下次在另外一台机器上使用这个镜像时候，只需要从仓库上 `pull` 下来就可以了。`Docker 仓库`的概念跟 `Git` 类似，`仓库注册服务器`可以理解为`GitHub`, `镜像`可以理解为`Github`上的项目 。
 
 
+
 ### **基本环境**
 
 > 系统:`ubuntu14.04 LTS(64bit)`
@@ -204,6 +205,8 @@ Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在�
       
     $ `sudo docker rmi $(docker images -q -f "dangling=true")`
     $ 全写 : `sudo docker rmi $(docker images --quiet --filter "dangling=true")`
+    
+11. 重命名镜像 `docker tag [imagename:tag] [new name:tag]`
 
 ### **容器**
 
@@ -246,7 +249,7 @@ Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在�
     $ `docker run -idt ubuntu`
     12d1f3b849229e0997d3d97bfb97608f3b615c398dfa41627cd88ce751aa82f0
     $ `docker ps`
-    
+        
 | CONTAINER ID  | IMAGE  | COMMAND  | CREATED   |  STATUS    | PORTS   | NAMES |
 |---------------|--------|----------|-----------|------------|---------|-------|
 | 12d1f3b84922  |ubuntu:16.04| "/bin/bash" | 4 seconds ago | Up 4 seconds | |tender_swartz|     
@@ -254,7 +257,8 @@ Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在�
    $ docker attach tender_swartz
    root@12d1f3b84922:/#
    
-   > 更多 [进入容器](https://yeasy.gitbooks.io/docker_practice/content/container/enter.html)
+   > `nsenter`命令进入容器 [GitBook](https://yeasy.gitbooks.io/docker_practice/content/container/enter.html)
+ 
    
 7. `docker export` : 导出容器到本地
 
@@ -297,7 +301,13 @@ Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在�
 
     - 通过` docker push `命令来将镜像推送到 Docker Hub
     
-> 更多内容请访问 [自动创建](https://yeasy.gitbooks.io/docker_practice/content/repository/dockerhub.html)
+    - 更多内容请访问 [自动创建](https://yeasy.gitbooks.io/docker_practice/content/repository/dockerhub.html)
+
+> **三者之间的关系:**
+
+  - `Registry(仓库中心)`包含一个或多个`Repository(仓库)`
+  - `Repository(仓库)`包含一个或多个`Image(镜像)`
+  - `Image(镜像)`用GUID表示，有一个或多个`Tag(标签)`与之关联
 
 
 
