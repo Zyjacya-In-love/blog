@@ -45,6 +45,8 @@ title: Cpp Primer
 
 - 本质:类名本质上就是一个命名空间
 
+> 在C++中`class` 和`struct` 的唯一区别 : class的访问权限是private的, 而struct是public的; 但是在C语言中, class只是一些数据的集合, 没有C++中类的特性
  
+
 
  
