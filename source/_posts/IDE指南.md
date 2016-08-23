@@ -46,6 +46,16 @@ tags:
 - `Ctrl + Shift + Enter` 自动结束代码，行末自动添加分号
 
 
+### **打包jar文件**
+
+1. 菜单：`File`->`project stucture`
+
+2. 在弹窗最左侧选中`Artifacts`->`"+"`,选`jar`，选择`from modules with dependencies`，然后会有配置窗口出现，配置完成后，勾选`Build on make` ->`ok`保存
+
+3. 然后菜单：`Build`->`build Artifacts`->`build`
+
+4. 最后在项目的`out/artifacts/`目录找输出的jar包
+
 
 
 
