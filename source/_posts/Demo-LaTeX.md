@@ -73,6 +73,15 @@ tags:
   
   `\sum_{k=1}^n\frac{1}{k}` : $\sum_{k=1}^n\frac{1}{k}$
 
+### **微分**
+
+$$\frac{\partial E_\hat{w}}{\partial \hat{w}}= 2X^T(X\vec{\hat{w}}-\vec{y}) = 0$$
+
+### **加粗**
+
+$\mathbf{x}_i$
+
+$$\frac{\partial E_\hat{w}}{\partial \hat{w}}$$
   
 ### **多重积分**
 
@@ -243,6 +252,10 @@ a_3x+b_3y+c_3z &=d_3
 \end{array} 
 \right.
 $$
+
+### 上下文字
+
+$$ \mathop {\arg min }\limits_{(w,b)}^{top} f(x)$$
 
 ### 公式标记与引用
 
