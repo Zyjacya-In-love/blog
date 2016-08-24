@@ -75,13 +75,14 @@ tags:
 
 ### **微分**
 
+`\frac{\partial E_w}{\partial w}` : $\frac{\partial E_w}{\partial w}$
+
 $$\frac{\partial E_\hat{w}}{\partial \hat{w}}= 2X^T(X\vec{\hat{w}}-\vec{y}) = 0$$
 
 ### **加粗**
 
-$\mathbf{x}_i$
+`\mathbf{x}_i : `$\mathbf{x}_i$
 
-$$\frac{\partial E_\hat{w}}{\partial \hat{w}}$$
   
 ### **多重积分**
 
