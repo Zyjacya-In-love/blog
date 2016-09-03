@@ -9,7 +9,7 @@ categories:
 斯坦福大学李飞飞团队的公开课`CS231n- Convolutional Neural Networks for Visual Recognition`, 这篇文章介绍了课程作业`assignment1`中`线性模型`,`SVM`和`Softmax`的基本原理及`TODO`部分的代码实现.[Github](https://github.com/Simshang/CS231n)
 <!--more-->
 
-### **线性模型**
+### **线性模型** 
 
 利用线性模型进行分类, 在模型中有两部分, `评分函数`和`损失函数`
 
