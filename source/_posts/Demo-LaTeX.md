@@ -11,7 +11,7 @@ tags:
 <!--more-->
 
 > 本篇博客的[Markdown文件](https://github.com/Simshang/blog/blob/master/source/_posts/Demo-LaTeX.md)
-> **转义问题**: 多个`_`会和markdown渲染冲突, 需要`\`对每个`_`进行转义
+> **转义问题**: 多个`_`会和markdown渲染冲突, 需要`\`对每个`_`进行转义, 显示`{`需要`\\{`来转义
 
 ## **基本概念**
 
@@ -345,7 +345,7 @@ $$
 $$
  f(n) =
     \begin{cases}
-    n/2,  & \text{if $n$ is even} \\\\[4ex]
+    n/2,  & \text{if $n$ is even} \\\\[2ex]
     3n+1, & \text{if $n$ is odd}
     \end{cases}
 $$
