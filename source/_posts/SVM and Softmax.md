@@ -9,7 +9,7 @@ tags:
 categories:
   - cs231n
 ---
-斯坦福大学李飞飞团队的公开课`CS231n- Convolutional Neural Networks for Visual Recognition`, 这篇文章介绍了课程作业`assignment1`中`线性模型`,`SVM`和`Softmax`的基本原理及`TODO`部分的代码实现.[Github](https://github.com/Simshang/CS231n)
+斯坦福大学李飞飞团队的公开课`CS231n- Convolutional Neural Networks for Visual Recognition`, 这篇文章介绍了课程笔记中的`线性模型`,`SVM`和`Softmax`的基本原理, 对应的`assignment1`中的代码实现见[Github](https://github.com/Simshang/CS231n)
 <!--more-->
 
 ### **线性模型** 
