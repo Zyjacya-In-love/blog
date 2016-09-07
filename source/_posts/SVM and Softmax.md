@@ -70,7 +70,13 @@ $$ f(x\_i, W, b) =  W x\_i + b $$
 
 - 其实可以理解为`逻辑回归`的基础上找到最优的决策边界, 该决策边界具有`间隔最大化`的特征, 因为用逻辑回归训练出来的决策边界可能有多种选择, `间隔最大化`的边界鲁棒性最强
 
-> 如何做到间隔最大化呢?
+> 如何做到间隔最大化呢? 首先看一下SVM的惩罚函数Hinge Loss
+
+![](/img/SVM-and-Softmax/LossFunctions.svg)
+
+- $Hinge Loss$的定义
+
+$$ Hinge loss(x_i)= \max(0, 1 - y\_i w^Tx\_i)$$
 
 ![](/img/SVM-and-Softmax/svmloss.jpg)
 
@@ -78,25 +84,27 @@ $$ f(x\_i, W, b) =  W x\_i + b $$
 
 $$ L\_i = C \max(0, 1 - y\_i w^Tx\_i) + R(W) $$
 
-- $C$是超参数, $C \propto \frac{1}{\lambda}$
+- $C$是超参数, $C \propto \frac{1}{\lambda}$, 其作用和$\lambda$一样, 后续介绍
 
 - $y\_i \in \\{ -1,1 \\}$
 
-![](/img/SVM-and-Softmax/LossFunctions.png)
-
-由上图可知, $ Cost(x) $可被定义为:
+由二分类的SVM代价函数构造多分类的代价函数, 为了方便表示, 令$s=f(x\_i, W)\_{y\_i}-f(x\_i, W)\_j$, 惩罚函数$ Cost(x_i) $可被定义为:
 
 $$
- Loss(s) =
+ Cost(x_i) =
     \begin{cases}
-    -s,  & \text{if $s=f(x\_i, W)\_{y\_i}-f(x\_i, W)\_j< \Delta$ } \\\\[2ex]
+    -s+\Delta,  & \text{if $s=f(x\_i, W)\_{y\_i}-f(x\_i, W)\_j< \Delta$ } \\\\[2ex]
     0,   & \text{if $s=f(x\_i, W)\_{y\_i}-f(x\_i, W)\_j> \Delta$ }
     \end{cases}
 $$
 
 $$ =\max(0, f(x\_i, W)\_j-f(x\_i, W)\_{y\_i} + \Delta) $$
 
-- **SVM代价函数的定义**
+$$ =\max(0, s\_j - s\_{y\_i} + \Delta) $$
+
+$$ =\max(0, s + \Delta) $$
+
+- **多分类SVM代价函数的定义**
 
 $$ L\_i = \sum\_{j\neq y\_i} \max(0, s\_j - s\_{y\_i} + \Delta) $$
 
@@ -151,7 +159,58 @@ $$ = \frac{1}{N} \sum\_i \sum\_{j\neq y\_i} \left[ \max(0, f(x\_i; W)\_j - f(x\_
 
 ### **Softmax**
 
+对于Softmax分类器, 我们在 [从线性模型到神经网络](http://simtalk.cn/2016/08/23/%E4%BB%8E%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/)的逻辑回归部分提到过, 但是没有扩展, 在这里我们好好学习一下, 我们可以理解为利用逻辑回归做多分类任务, 但是我们知道逻辑回归是二分类器, 那么Softmax是怎么做到的呢?
+
+- **Softmax思想**: 将每一种类别作为一类, 其他类作为一类, 然后对每一类进行二分类操作, 然后计算每一类基于其他类的概率, 得到在每一类上的分类概率, 选择最大类别输出, 这样就实现了多分类任务 
+
 - **Softmax基础**
 
-$$ L\_i = -\log\left(\frac{e^{f\_{y\_i}}}{ \sum\_j e^{f\_j} }\right) \hspace{0.5in} \text{or equivalently} \hspace{0.5in} L\_i = -f\_{y\_i} + \log\sum\_j e^{f\_j} $$
+在Softmax模型中, 评分函数$f(x\_i; W) =  W x\_i$保持不变, 但是在代价函数的构造方面, 不同于SVM的`Hinge Loss`, Softmax采用了`交叉熵损失（cross-entropy loss）`, 正则项也保持与SVM一样, 
 
+$$ L\_i = -\log\left(\frac{e^{f\_{y\_i}}}{ \sum\_j e^{f\_j} }\right) $$
+
+$$= -f\_{y\_i} + \log\sum\_j e^{f\_j} $$
+
+式中,
+
+- $f_j$代表评分向量的中的第$j$个元素 
+
+$$f\_j(z) = \frac{e^{z\_j}}{\sum\_k e^{z\_k}}$$
+
+叫做`Softmax函数`
+ 
+- $z$是一个评分向量, $z_k$代表评分向量中第$k$个元素
+
+- 通过Softmax函数, 我们将评分向量$z$中的每个元素映射到了(0,1)之间, 并且输出的向量$f_z$的所有元素之和为1, 其实可以理解为该样本$x_i$在每一个类别上的概率
+
+### **实现TODO**
+
+- 数值的稳定性: 由于在计算Softmax函数是存在指数运算导致结果很大, 除以一个非常大的值使得运算不稳定, 所以使用归一化技巧十分重要
+
+$$\frac{e^{f\_{y\_i}}}{\sum\_j e^{f\_j}}
+  = \frac{Ce^{f\_{y\_i}}}{C\sum\_j e^{f\_j}}
+  = \frac{e^{f\_{y\_i} + \log C}}{\sum\_j e^{f\_j + \log C}}$$
+  
+- 在分子和分母同时乘以一个常数项$C$, $C$的取值没有限制, 但是为了限制指数项的不能过大, 通常$\log C = -\max f_j$, 也就是说将向量$f$中的数值进行平移，使得最大值为0, 这样指数运算的结果就在(0,1)之间了 
+
+### **SVM和Softmax的比较**
+ 
+![](/img/SVM-and-Softmax/svmvssoftmax.png)
+
+首先, 单纯的比较两个模型代价函数的值毫无意义, 我们比较一下两种损失函数的构建思想:
+
+1. 对于SVM, 如果分数是[10, -100, -100]或者[10, 9, 9]，对于SVM来说没设么不同，只要满足超过边界值等于1，那么损失值就等于0
+
+2. 对于softmax分类器，情况则不同。对于[10, 9, 9]来说，计算出的损失值就远远高于[10, -100, -100]的损失值, softmax分类器对于分数是永远不会满意的: 正确分类总能得到更高的可能性, 错误分类总能得到更低的可能性, 损失值总是能够更小, 然而SVM只要边界值被满足了就可以了, 不会超过限制去细微地操作具体分数
+
+通过损失函数的计算, SVM将模型输出理解为分类评分, Softmax将模型输出理解为该类别的概率, 但是注意这种概率是受正则化参数$\lambda$影响的, $\lambda$影响概率的离散程度, 举个例子
+
+- $\lambda$的值较小时, 模型输出评分向量$[1, -2, 0]$, Softmax结果:
+
+$$ [1, -2, 0] \rightarrow [e^1, e^{-2}, e^0] = [2.71, 0.14, 1] \rightarrow [0.7, 0.04, 0.26] $$
+
+- 当$ \lambda $增大, Softmax输出为: 
+
+$$ [0.5, -1, 0] \rightarrow [e^{0.5}, e^{-1}, e^0] = [1.65, 0.37, 1] \rightarrow [0.55, 0.12, 0.33] $$
+
+比较两种结果, 第二种更加分散, 当$\lambda$趋于无穷大的时候, Softmax输出趋于均匀分布, 所以不能将Softmax的结果看作为真正的概率, 最好是看成一种对于分类正确的自信
