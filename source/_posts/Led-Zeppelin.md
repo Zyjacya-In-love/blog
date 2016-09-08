@@ -10,7 +10,7 @@ categories:
 
 > Yes, there are two paths you can go by
   But in the long run
-  There's still time to change the road you are on.
+  There is still time to change the road you are on.
 
 
 <!--more-->

@@ -1,12 +1,9 @@
 ---
-
 title: Markdown不完全教程
-
 date: 2016-03-17 14:44:42
-
+toc: true
 tags: 
 - Markdown
-
 ---
 
 - Github上Markdown使用教程中文版(基本用法)，并补充了使用MathJax引擎,使得markdown支持Tex语法编写数学公式。

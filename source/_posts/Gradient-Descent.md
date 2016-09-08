@@ -1,6 +1,7 @@
 ---
 title: Gradient Descent
 date: 2016-09-05 22:46:04
+toc: true
 tags:
   - 梯度下降法
 categories:

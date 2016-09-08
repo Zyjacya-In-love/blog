@@ -1,6 +1,7 @@
 ---
 title: kNN
 date: 2016-08-22 22:30:48
+toc: true
 tags:
   - kNN
 categories:

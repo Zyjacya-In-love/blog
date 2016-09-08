@@ -1,6 +1,7 @@
 ---
 title: 用Big-O进行算法分析
 date: 2016-07-05 09:31:07
+toc: true
 tags:
   - BigO
 categories:
@@ -15,7 +16,7 @@ categories:
 
 一般情况下，算法中基本操作重复执行的次数是问题规模$n$的某个函数，用$T(n)$表示
 
-### 不同算法复杂度的运行时间
+- **不同算法复杂度的运行时间**
 
 ![](/img/用Big-O进行算法分析/math.gif)
 
@@ -74,7 +75,7 @@ categories:
 
 > 引自[Sarah Lawrence College](http://science.slc.edu/~jmarshall/courses/2002/spring/cs50/BigO/)
 
-## **常用算法复杂度检索**
+### **常用算法复杂度检索**
 
 - 最坏情况（Worst）：任意输入规模的最大运行时间。（Usually）
 - 平均情况（Average）：任意输入规模的期待运行时间。（Sometimes）

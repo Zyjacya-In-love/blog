@@ -1,10 +1,9 @@
 ---
 title: Hexo入门
+toc: true
 tags:
 - Hexo
-
 date: 2015-2-07 15:28:52
-
 ---
 
 

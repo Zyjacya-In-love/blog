@@ -1,6 +1,7 @@
 ---
 title: SVM and Softmax
 date: 2016-09-02 17:30:59
+toc: true
 tags:
   - 线性模型
   - SVM
