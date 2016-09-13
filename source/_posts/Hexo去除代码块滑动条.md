@@ -17,18 +17,35 @@ date: 2016-07-07 17:48:52
 源代码:`themes/yilia/source/css/_partial/highlight.styl`文件
 
 ```
-pre
+.article-entry
+  pre, code
+    font-family: font-mono
+  code
+    background: color-background
+    padding: 0 0.3em
+    border: none
+  pre
     @extend $code-block
     color: code-word
-    overflow: hidden //添加
+    overflow: hidden //去除滑动条
     code
       background: none
       text-shadow: none
       padding: 0
       color: code-word
+  .highlight
+    @extend $code-block
+    border-radius: 4px
+    pre
+      border: none
+      margin: 0
+      padding: 0
+      padding-bottom: 5px; //调整最后一行显示
 ```
 
 - 通过浏览器的检查功能,定位到滑动条的位置,在`color: code-word`属性下面添加`overflow: hidden`
+
+- `padding-bottom: 5px;`调整最后一行显示, 否则显示不全
 
 > 最终效果:
   ![](/img/hexo去除代码块滑动条/hexo3codeblock.JPG)

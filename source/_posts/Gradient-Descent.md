@@ -85,37 +85,34 @@ $$\frac{df(x)}{dx} = \lim_{h\ \to 0} \frac{f(x + h) - f(x)}{h}$$
 
 ### **梯度的计算**
 
-1. **数值梯度法 : 计算速度慢且不精确**
+**数值梯度法 : 计算速度慢且不精确**
 
     ```python
-    作者：杜客
-    链接：https://zhuanlan.zhihu.com/p/21387326
-    
     def eval_numerical_gradient(f, x):
-      """  
-      一个f在x处的数值梯度法的简单实现
-      - f是只有一个参数的函数
-      - x是计算梯度的点
+      """ 
+      a naive implementation of numerical gradient of f at x 
+      - f should be a function that takes a single argument
+      - x is the point (numpy array) to evaluate the gradient at
       """ 
     
-      fx = f(x) # 在原点计算函数值
+      fx = f(x) # evaluate function value at original point
       grad = np.zeros(x.shape)
       h = 0.00001
     
-      # 对x中所有的索引进行迭代
+      # iterate over all indexes in x
       it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
       while not it.finished:
     
-        # 计算x+h处的函数值
+        # evaluate function at x+h
         ix = it.multi_index
         old_value = x[ix]
-        x[ix] = old_value + h # 增加h
-        fxh = f(x) # 计算f(x + h)
-        x[ix] = old_value # 存到前一个值中 (非常重要)
+        x[ix] = old_value + h # increment by h
+        fxh = f(x) # evalute f(x + h)
+        x[ix] = old_value # restore to previous value (very important!)
     
-        # 计算偏导数
-        grad[ix] = (fxh - fx) / h # 坡度
-        it.iternext() # 到下个维度
+        # compute the partial derivative
+        grad[ix] = (fxh - fx) / h # the slope
+        it.iternext() # step to next dimension
     
       return grad
     ```
@@ -124,8 +121,8 @@ $$\frac{df(x)}{dx} = \lim_{h\ \to 0} \frac{f(x + h) - f(x)}{h}$$
  
    - 在数学公式中，h的取值是趋近于0的，然而在实际中，用一个很小的数值（比如例子中的1e-5）就足够了。
    - 实际中用中心差值公式（centered difference formula）: $\frac{df(x)}{dx} =\frac{[f(x+h) - f(x-h)]}{ 2 h}$
-   - **在梯度负方向上更新：在上面的代码中，为了计算$W_new$，要注意我们是向着梯度$df$的负方向去更新，这是因为我们希望损失函数值是降低而不是升高。**
-   - `学习率`的影响, 参见[从线性模型到神经网络](http://simtalk.cn/2016/08/23/%E4%BB%8E%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/) 中的`梯度下降法`部分
+   - **在梯度负方向上更新：在上面的代码中，为了计算$W_{new}$，要注意我们是向着梯度$df$的负方向去更新，这是因为我们希望损失函数值是降低而不是升高。**
+   - `学习率`的影响, 参见[从线性模型到神经网络](http://simtalk.cn/2016/08/23/%E4%BB%8E%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/#梯度下降法) 中的`梯度下降法`部分
    - 效率问题: 计算数值梯度的复杂性和参数的量线性相关, 在模型中有30730个参数，所以损失函数每走一步就需要计算30731次损失函数的梯度, 神经网络很容易就有上千万的参数，显然这个策略不适合大规模数据，我们需要更好的策略。
  
  

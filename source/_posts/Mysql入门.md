@@ -1,6 +1,7 @@
 ---
 title: Mysql入门
 date: 2016-04-1 10:24:46
+toc: true
 tags:
 - Mysql
 ---
