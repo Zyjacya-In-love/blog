@@ -146,9 +146,9 @@ There is a literal \`backtick\`here.
 
 
 ### 表格
-|   字段1 |  字段2  | 字段3 |
-|-----------|-----------|-----|
-|  shang  |  coder  |  bupt  |
+|  字段1  |  字段2  |  字段3  |
+|--------|--- -----|--------|
+|  shang |  coder  |  bupt  |
 
 ### Mathjax公式:采用Tex语法
 
