@@ -251,7 +251,7 @@ $max(x, y)$反向传播相当于将梯度只沿最大的数回传。因此，在
 
 卷积神经网络最常见的形式就是将一些卷积层和ReLU层放在一起，其后紧跟汇聚层，然后重复如此直到图像在空间上被缩小到一个足够小的尺寸，在某个地方过渡成成全连接层也较为常见。最后的全连接层得到输出，比如分类评分等。
 
-$$INPUT /Rightarrow [[CONV \Rightarrow RELU]\*N \Rightarrow POOL?]\*M \Rightarrow [FC /Rightarrow RELU]\*K \Rightarrow FC$$
+$$INPUT \Rightarrow [[CONV \Rightarrow RELU]\*N \Rightarrow POOL?]\*M \Rightarrow [FC \Rightarrow RELU]\*K \Rightarrow FC$$
 
 上式中,
 
@@ -261,17 +261,17 @@ $$INPUT /Rightarrow [[CONV \Rightarrow RELU]\*N \Rightarrow POOL?]\*M \Rightarro
 
 **常见的网络结构规律：**
 
-$$INPUT /Rightarrow FC$$
+$$INPUT \Rightarrow FC$$
 
 - 实现一个线性分类器，此处N = M = K = 0。
 
-$$INPUT /Rightarrow CONV /Rightarrow RELU /Rightarrow FC$$
+$$INPUT \Rightarrow CONV \Rightarrow RELU \Rightarrow FC$$
 
-$$INPUT /Rightarrow [CONV /Rightarrow RELU /Rightarrow POOL]*2 /Rightarrow FC /Rightarrow RELU /Rightarrow FC$$
+$$INPUT \Rightarrow [CONV \Rightarrow RELU \Rightarrow POOL]*2 \Rightarrow FC \Rightarrow RELU \Rightarrow FC$$
 
 - 此处在每个汇聚层之间有一个卷积层。
 
-$$INPUT /Rightarrow [CONV /Rightarrow RELU /Rightarrow CONV /Rightarrow RELU /Rightarrow POOL]*3 /Rightarrow [FC /Rightarrow RELU]*2 /Rightarrow FC$$
+$$INPUT \Rightarrow [CONV \Rightarrow RELU \Rightarrow CONV \Rightarrow RELU \Rightarrow POOL]\*3 \Rightarrow [FC \Rightarrow RELU]\*2 \Rightarrow FC$$
 
 - 此处每个汇聚层前有两个卷积层，这个思路适用于更大更深的网络，因为在执行具有破坏性的汇聚操作前，多重的卷积层可以从输入数据中学习到更多的复杂特征
 

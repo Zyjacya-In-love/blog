@@ -1,8 +1,8 @@
 ---
-title: Java杂记
+title: 理解面向对象与Java
+toc: true
 tags:
   - Java
-  - 更新中
 date: 2016-07-14 17:34:55
 ---
 
