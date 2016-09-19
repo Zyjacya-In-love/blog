@@ -66,3 +66,19 @@ categories:
 2. `sudo docker search caffe`
 
 3. `sudo docker pull kaixhin/caffe` 
+
+### dockerfile创建镜像
+
+> 创建过程见 [Dockerfile创建镜像](http://simtalk.cn/2016/08/21/Dockerfile%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F/)
+
+- [dockerfile下载地址](https://github.com/BVLC/caffe/tree/master/docker)
+
+进入dockerfile所在的目录:
+
+`sudo docker build -t caffe:cpu ./`
+
+- 创建cpu镜像镜像, 注意这里下载的dockerfile是cpu版本的, 如果是gpu版本的dockerfile则
+
+`sudo docker build -t caffe:gpu ./`
+
+

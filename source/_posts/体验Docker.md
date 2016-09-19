@@ -205,7 +205,7 @@ Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在�
     $ `sudo docker rmi $(docker images -q -f "dangling=true")`
     $ 全写 : `sudo docker rmi $(docker images --quiet --filter "dangling=true")`
     
-11. 重命名镜像 `docker tag [imagename:tag] [new name:tag]`
+11. 重命名镜像 `docker tag [imagename:tag] [new name:tag]` 或者 `docker tag [IMAGE ID] [new name:tag]`
 
 ### **容器**
 

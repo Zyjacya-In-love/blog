@@ -1,11 +1,11 @@
 ---
-
-title: Python Error Solution
+title: Python编程笔记
 date: 2016-06-06 20:11:11
+toc: true
 tags:
-- Python
-- 更新中
-
+  - Python
+categories:
+  - 笔记
 ---
 
 记录在python开发过程中,常见的错误以及解决方法.

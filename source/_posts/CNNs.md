@@ -323,7 +323,7 @@ $$INPUT \Rightarrow [CONV \Rightarrow RELU \Rightarrow CONV \Rightarrow RELU \Ri
    - 最后没有使用全连接层
    - 何恺明的的 [演讲](https://www.youtube.com/watch?v=1PGLj-uKT1w) 和 [PPT](http://research.microsoft.com/en-us/um/people/kahe/ilsvrc15/ilsvrc2015_deep_residual_learning_kaiminghe.pdf)
    - [Torch重现网络的实验](https://github.com/gcr/torch-residual-networks)
-   - 对原始结构做一些优化，可以看论文 [Identity Mappings in Deep Residual Networks]https://arxiv.org/abs/1603.05027() 
+   - 对原始结构做一些优化，可以看论文 [Identity Mappings in Deep Residual Networks](https://arxiv.org/abs/1603.05027)
    - [State of the art ResNets in Torch7](http://torch.ch/blog/2016/02/04/resnets.html)
 
 > 以上部分内容引自 [智能单元](https://zhuanlan.zhihu.com/p/22038289?refer=intelligentunit)

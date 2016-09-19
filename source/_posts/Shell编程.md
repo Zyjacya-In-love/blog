@@ -1,15 +1,13 @@
 ---
-title: Shell编程
+title: Shell编程笔记
 date: 2016-03-21 19:21:43
 tags:
   - Shell
 categories:
-  - Linux
+  - 笔记
 ---
 学习Shell笔记
 <!--more-->
-
-
 
 ###  **什么是Shell?**
 
@@ -61,9 +59,6 @@ $ `echo $?`
 1. `-a` : and 与运算
 2. `-o` : or  或运算
 3. `!`  : 非运算
-4. 
-
-
 
 ### **更多**
 
