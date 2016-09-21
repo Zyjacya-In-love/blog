@@ -1,11 +1,11 @@
 ---
 title: Linux杂记
 date: 2016-04-11 16:51:57
+toc: true
 tags:
-  - 更新中
+  - OS
 categories:
   - Linux
-
 ---
 
 其实Linux有很多的发行版,用过的有Centos6.5和Ubuntu14.04,想写篇文章用来记录在使用和部署服务器过程中的问题,以及常用的Linux命令和对Linux的理解.

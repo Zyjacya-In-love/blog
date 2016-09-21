@@ -5,18 +5,19 @@ toc: true
 tags:
   - Caffe
 categories:
-  - 深度学习
+  - Caffe
 ---
-这边博客是 [Caffe中国优化社区](http://caffecn.cn/)的 [官方教程](http://caffecn.cn/?/page/tutorial) 学习笔记, 介绍在学习使用caffe过程中的问题与心得
+这篇博客是 [Caffe中国优化社区](http://caffecn.cn/)的 [Caffe Tutorial 中文版](http://caffecn.cn/?/page/tutorial) 使用笔记, 介绍在使用Caffe过程中的问题与心得, 这篇文章不会过多介绍Caffe框架本身, 更多的是使用方法
 
 <!--more-->
 
 Caffe 基于自己的模型架构，通过逐层定义（layer-by-layer）的方式定义一个网络（Nets）, 网络从数据输入层到损失层自下而上地定义整个模型。
 
+- [Caffe Code](http://caffe.berkeleyvision.org/doxygen/index.html)
+- [Caffe Tutorial](http://caffe.berkeleyvision.org/tutorial/)
 - [Caffe Prototxt Generator](http://yanglei.me/gen_proto/)
 - [Netscope](http://ethereon.github.io/netscope/quickstart.html)
 
-### **基本概念**
 
 ### **caffe的编译**
 
