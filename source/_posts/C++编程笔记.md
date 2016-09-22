@@ -10,6 +10,138 @@ categories:
 一点点的积累
 <!--more-->
 
+### **g++的安装与编译**
+
+1. 下载源码
+
+   `wget ftp://ftp.gnu.org/gnu/gcc/gcc-4.8.5/gcc-4.8.5.tar.gz`
+   
+2. 下载依赖包
+
+   - 编译安装 GCC 需要依赖 mpc，mpfr，gmp包。好在 GCC 源码里自带脚本可以轻松下载依赖包。
+
+   `tar zxf gcc-4.8.5.tar.gz`
+   `cd gcc-4.8.5`
+   `./contrib/download_prerequisites`
+   - 用vim查看文件, 在此脚本里可以看到依赖包的版本号依次是 mpc-0.8.1，mpfr-2.4.2，gmp-4.3.2。
+
+3. 编译安装
+
+   `mkdir gcc-build-4.8.5`
+   `cd gcc-build-4.8.5`
+   `../configure -enable-checking=release -enable-languages=c,c++ -disable-multilib`
+   `make && make install`
+   
+   - 为了避免安装后系统里出现多个版本的 GCC，这里直接将编译安装的目录指定为 /usr，如果不指定 –prefix，则会默认安装到 /usr/local 下。
+   - GCC 4.8.5 光是源代码就有105MB，因此可以预见整个编译过程需要很长时间（差不多 2 个小时左右）。
+
+4. 查看版本号
+
+   `gcc --version`
+   gcc (GCC) 4.8.5
+
+   `which gcc`
+   /usr/bin/gcc
+
+   `which g++`
+   /usr/bin/g++
+   
+**支持C++11特性**
+
+如果用命令 g++ -g -Wall main.cpp  编译以下代码 ：
+
+```
+/*
+    file : main.cpp
+*/
+#include <stdio.h>
+ 
+int main() {
+    int a[5] = { 1, 2, 2, 5, 1 };
+    for( int i:a ) {
+        printf( "%d\n", a[i] );
+    }
+    return 0;
+}
+```
+
+提示错误:
+
+```
+main.cpp: In function ‘int main()’:
+main.cpp:5:13: error: range-based ‘for’ loops are not allowed in C++98 mode
+  for( int i:a ) {
+```
+
+在C++98中不支持此循环方式，因为这是C++11新增的循环方式。
+
+那么如果一定要编译呢？
+
+通过命令man g++可以得知以下方法：
+
+`g++ -g -Wall -std=c++11 main.cpp`
+
+除了g++ , gcc 也可以类似方法支持C11
+
+`gcc -g -Wall -std=c11 main.cpp`
+
+生成可执行文件:
+
+`g++ -std=c++11 -o main main.cpp`
+
+
+### **编译源代码**
+
+`gcc `和` g++`分别是GNU的C和C++的编译器, 我们拿`hello world`来举例子, 
+
+`g++指令的一般格式为：g++ [选项] 要编译的文件 [选项] [目标文件]`
+
+```c++
+#include<iostream>
+using namespace std;
+
+int main (void)
+{
+    cout<<"hello world"<<endl;
+    return 0;
+}
+
+```
+
+1. 预处理器对`.cpp`文件进行预处理生成`.i`文件, 预处理做了宏的替换，还有注释的消除，可以理解为无关代码的清除
+
+   `g++ -E hello.cpp > hello.i`
+   
+   - 如果不重定向, 只激活预处理,这个命令不生成文件, 你需要把它重定向到一个输出文件里`hello.i`
+   
+   `vim hello.i`打开生成的文件可以看到头文件被替换
+
+2. 编译器对`.cpp`文件进行编译生成包含汇编指令的`.s`文件
+
+  `g++ -S hello.cpp`
+  
+  - `.s`文件表示是汇编文件，用Vim编辑器打开就都是汇编指令
+  
+3. 汇编器对汇编指令变为目标代码(机器代码), 即将`.s`文件生成`.o`文件
+
+  `g++ -c hello.s`
+  
+4. 链接器将目标代码链接起来生成可执行文件
+
+   `g++ hello.o -o hello`
+   
+   - 注意, 以上命令可以从源文件`.cpp`一次性编译, `g++ -o hello hello.cpp` : 将.cpp文件直接编译成名为`hello`的可执行文件
+   - 在Linux系统中, 生成名为`hello`的没有后缀的可执行文件, 用`./hello`执行;如果没有`-o hello`参数, 会生成名为`a.out`的文件, `./a.out`执行
+   - Windows系统中生成`.exe`文件
+
+
+**常用参数**
+  
+- `-E`参数 : 指示编译器仅对输入文件进行预处理。当这个选项被使用时, 预处理器的输出被送到标准输出而不是储存在文件里, 所以需要重定向保存为`.i`文件
+- `-S`参数 : 指示编译器对`.cpp`文件产生汇编语言文件后停止编译, 产生的汇编语言文件的缺省扩展名是`.s`
+- `-c`参数 : 指示编译器仅把源代码编译为目标代码(`.o`文件)
+- `-o`参数 : 指示编译器为将产生的可执行文件用指定的文件名, Linux下没有后缀
+
 ### **建议**
 
 1. 在 C++中几乎不需要用宏，用 `const` 或 `enum` 定义显式的常量，用 `inline` 避免函数调用的额外开销，用模板去刻画一族函数或类型，用 `namespace` 去避免命名冲突。
@@ -19,11 +151,19 @@ categories:
 5. 尽量少用`数组`和` C `风格的字符串，标准库中的` string` 和 `vector `可以简化程序。
 6. 更加重要的是，试着将程序考虑为一组由`类和对象`表示的相互作用的概念，而不是一堆数据结构和一些可以拨弄的二进制。
 
-### 文件重定向($P_19$)
+### **文件重定向**
+
+在`C++ Primer`的$P_{19}$页
 
 - 在编译好的`.exe`文件拷贝到`数据`目录下, 执行`$ EXEFilename <infile>output.txt`
 
-### 函数重载的底层实现
+`./a.out <./data/word_echo>a`
+
+- `可执行文件a.out`在当前目录
+- 将`word_echo`文件的内容作为可执行文件`a.out`的输入
+- 可执行文件`a.out`的输出重定向到`a文件`里
+
+### **函数重载的底层实现**
 
 > `Name Mangling`是一种在编译过程中，将函数、变量的名称重新改编的机制，简单来说就是编译器为了区分各个函数，将函数通过一定算法，重新修饰为一个全局唯一的名称。
 
@@ -34,7 +174,7 @@ categories:
 - 注意:C++完全兼容C语言，那就面临着，`完全兼容C的类库`。由`.c 文件`的类库文件中函数名并没有发生name mangling 行为，而我们在`.cpp文件中`包含`.c 文件所对应的.h 文件`时，`.h 文件`要发生name manling 行为，因而会发生在`链接的时候`的错误。
 - C++为了避免上述错误的发生，重载了关键字` extern`。要避免 name manling的函数前，加 `extern "C"` 如有多个函数声明要避免，则放入` extern "C"{}`
      
-### 引用
+### **引用**
 
 - 需求 :　进行参数的传递
 - 本质 :　引用是个特殊的指针, 对指针的包装，扩展了指针的作用域，　不会暴露地址，　也不必开辟地址空间
@@ -49,7 +189,7 @@ categories:
 - 可以定义数组的引用`int (&arr)[3]=数组名`, 不能定义引用数组`int& refArr[] = {}`,但是可以定义指针数组`int* arr[]={存放指针变量}`
 - 当`const`修饰的时候, 引用就开辟了一块未命名的空间
 
-### 类
+### **类**
 
 - 本质:类名本质上就是一个命名空间
 

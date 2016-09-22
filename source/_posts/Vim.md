@@ -80,4 +80,48 @@ Vim是Linux下的文本编辑器, 在布置服务器的过程中修改一些配�
    - `Yellow`   = Basic
    - `Orange/Blue` = Advanced
    - `Red`   = Expert
+   
+### **配置C++代码提示**
+
+1. 安装Vim插件管理工具 [Vundle](https://github.com/VundleVim/Vundle.vim#about)
+
+   `git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim`
+   
+   - 上面命令将vundle克隆到用户根目录的`~/.vim/bundle/Vundle.vim`
+
+2. 在用户根目录下创建`.vimrc`文件, 在该文件中配置Vundle使用Vim相关插件, [.vimrc文件](https://github.com/VundleVim/Vundle.vim#quick-start)
+
+   `vim ~/.vimrc`
+   
+   - 安装代码补全插件[YouCompleteMe](https://github.com/Valloric/YouCompleteMe), 进入`~/.vim/bundle/`将YouCompleteMe克隆到该目录
+   
+   - 添加`Plugin 'Valloric/YouCompleteMe'`, 然后进入Vim命令模式执行`:PluginInstall`, 最后还需要去`~/.vim/bundle/YouCompleteMe`中`./install.sh`一下
+   
+3. 编译YouCompleteMe
+
+   - 在编译之前下载编译工具，准备编译YouCompleteMe
+   
+   `sudo yum install cmake python python-dev build-essential automake`
+   
+   - 编译YouCompleteMe使其支持C/C++ 自动补全
+   
+   `cd ~/.vim/bundle/YouCompleteMe`
+   `./install.py --clang-completer`
+   
+4. 配置Vim : 修改`.vimrc`文件
+
+   ```
+   let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py  
+   let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全  
+   let g:ycm_confirm_extra_conf=0   " 打开vim时不再询问是否加载ycm_extra_conf.py配置  
+   inoremap <expr> <CR>  pumvisible() ? "\<C-y>" : "\<CR>"    "回车即选中当前项  
+   set completeopt=longest,menu    "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)  
+   ```
+
+   
+   
+
+   
+
+
 
