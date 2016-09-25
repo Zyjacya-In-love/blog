@@ -7,8 +7,9 @@ tags:
 categories:
   - 笔记
 ---
-一点点的积累
+> 参考书 : [C++ Primer 中文版（第5版）](https://book.douban.com/subject/25708312/)
 <!--more-->
+> [C++开发文档](http://www.cplusplus.com/)
 
 ### **g++的安装与编译**
 
@@ -89,7 +90,6 @@ main.cpp:5:13: error: range-based ‘for’ loops are not allowed in C++98 mode
 
 `g++ -std=c++11 -o main main.cpp`
 
-
 ### **编译源代码**
 
 `gcc `和` g++`分别是GNU的C和C++的编译器, 我们拿`hello world`来举例子, 
@@ -133,6 +133,30 @@ int main (void)
    - 注意, 以上命令可以从源文件`.cpp`一次性编译, `g++ -o hello hello.cpp` : 将.cpp文件直接编译成名为`hello`的可执行文件
    - 在Linux系统中, 生成名为`hello`的没有后缀的可执行文件, 用`./hello`执行;如果没有`-o hello`参数, 会生成名为`a.out`的文件, `./a.out`执行
    - Windows系统中生成`.exe`文件
+
+### **编译指令**
+
+`#空指令`
+  - 无任何效果
+  
+`#include`
+  - 包含一个源代码文件
+`#define`
+  - 定义宏
+`#undef`
+  - 取消已定义的宏
+`#if`
+  - 如果给定条件为真，则编译下面代码
+`#ifdef`
+  - 如果宏已经定义，则编译下面代码
+`#ifndef`
+  - 如果宏没有定义，则编译下面代码
+`#elif`
+  - 如果前面的`#if`等条件不为真，当前条件为真，则编译下面代码, 相当于`elseif`
+`#endif`
+  - 结束一个`#if……#else`条件编译块
+`#error`
+  - 停止编译并显示错误信息
 
 
 **常用参数**
@@ -189,14 +213,66 @@ int main (void)
 - 可以定义数组的引用`int (&arr)[3]=数组名`, 不能定义引用数组`int& refArr[] = {}`,但是可以定义指针数组`int* arr[]={存放指针变量}`
 - 当`const`修饰的时候, 引用就开辟了一块未命名的空间
 
+> 一个验证引用的例子:
+
+```
+#include <iostream>
+using std::cout; using std::endl;
+
+#include <string>
+using std::string;
+
+#include <vector>
+using std::vector;
+
+#include <iterator>
+using std::begin; 
+using std::end;  
+
+void printVec(vector<int>& vec)
+{
+	for (auto index = vec.begin(); index != vec.end(); ++index)
+		cout << *index << " ";
+}
+
+int main()
+{
+	vector<int> val = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	for (auto v : val)
+	{
+		v *= v;
+		cout << v << endl;
+	}
+	printVec(val);
+	for (auto &v : val)
+	{
+		v *= v;
+		cout << v << endl;
+	}
+	printVec(val);
+}
+```
+
 ### **类**
 
 - 本质:类名本质上就是一个命名空间
 
 > 在C++中`class` 和`struct` 的唯一区别 : class的访问权限是private的, 而struct是public的; 但是在C语言中, class只是一些数据的集合, 没有C++中类的特性
+
+### **迭代器**
+
+容器是数据结构的泛指，迭代器是指针的泛指, C++迭代器`Interator`就是一个指向某种`STL对象的指针`, 是一种检查容器内元素并遍历元素的`数据类型`
+
+`指针`也是迭代器, 
  
 
 ### **常见问题**
 
 - `VS2013窗口一闪而过` : `Ctrl+F5`运行程序
+
+- 用`while`作为循环输入的时候, 用`Ctrl+Z`结束
+
+- 设置一个断点, 然后点击`本地Windows调试器`
+
+- 所谓的段错误`segmentation fault`就是指访问的内存超出了系统所给这个程序的内存空间
 

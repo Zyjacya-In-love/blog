@@ -7,10 +7,17 @@ tags:
 categories:
   - 笔记
 ---
+> 参考书 : [Python核心编程（第二版）](https://book.douban.com/subject/3112503/)
+> 参考书 : [利用Python进行数据分析](https://book.douban.com/subject/25779298/)
+<!--more-->
+### **我的程序**
 
+用Python写了一个ftp上传的工具, 见 [ftpUploader-Github](https://github.com/Simshang/ftpUploader)
+
+### **问题**
 记录在python开发过程中,常见的错误以及解决方法.
 
-<!--more-->
+
 
 >   报错信息 : Non-ASCII character '\xe5' in file computingValue.py on line 7, but no encoding declared;
 

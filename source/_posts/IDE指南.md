@@ -59,7 +59,7 @@ tags:
 
 ### **VS2013**
 
-**项目相关的快捷键**
+> **项目相关的快捷键**
 
 `Ctrl + Shift + B` = 生成项目
 
@@ -69,7 +69,7 @@ tags:
 
 `Shift + Alt + A` = 添加新项目到项目
 
-**编辑相关的快捷键**
+> **编辑相关的快捷键**
 
 `Ctrl + Enter` = 在当前行插入空行
 
@@ -97,7 +97,7 @@ tags:
 
 `Ctrl + Delete` = 删除光标右侧的所有字
 
-**导航相关的快捷键**
+> **导航相关的快捷键**
 
 `Ctrl +Up/Down` = 滚动窗口但不移动光标
 
@@ -107,7 +107,7 @@ tags:
 
 `F12` = 转到定义
 
-**调试相关的快捷键**
+> **调试相关的快捷键**
 
 `Ctrl + Alt + P` = 附加到进程
 
@@ -121,7 +121,7 @@ tags:
 
 `F9` = 设置或删除断点
 
-**搜索相关的快捷键**
+> **搜索相关的快捷键**
 
 `Ctrl + K  Ctrl + K` = 将当前行添加书签
 
@@ -141,6 +141,27 @@ tags:
 
 `Ctrl + Shift + F` = 查找所选条目在整个解决方案中的引用
 
+### **Sublime**
+
+> 基本快捷键
+
+`Ctrl+Shift+P` : 打开Package Control
+`Ctrl+` : 打开Command Console
+`Ctrl+k,Ctrl+b` : 打开关闭`sidebar`
+> Markdown
+
+- `OmniMarkupPreviewer`插件
+
+`Ctrl+Alt+O`: 在浏览器中预览markdown文件
+`Ctrl+Alt+X`: 将markdown文件导出为HTML文件
+`Ctrl+Alt+C`: 将markdown文件复制为HTML格式
+
+> C++
+
+- `SublimeAStyleFormatter`插件
+
+`ctrl+alt+f`: 将当前文件统一格式
+`ctrl+k, ctrl+f`: 将选定内容统一格式
 
 
 
