@@ -108,6 +108,8 @@ categories:
 
 $$\frac{W-F+2P}{S}+1$$
 
+- 深度的维数就是该卷积层的`卷积核`的个数(the number of filters)
+
 **参数共享**
 
 在 [ImageNet Classification with Deep Convolutional Neural Networks](http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks)中, 输入图像的尺寸是[227x227x3], 第一个卷积层神经元使用的感受野尺寸$F=11$，步长$S=4$，不使用零填充$P=0$, 那么输出空间的尺寸为(227 - 11)/4 + 1 = 55, 又由于卷积层的深度$K=96$，则卷积层的输出数据体尺寸为[55x55x96], 这样产生的55x55x96=290400个神经元中，每个都和输入数据体中一个尺寸为[11x11x3]的区域全连接, 在深度列上的96个神经元都是与输入数据体中同一个[11x11x3]区域连接，但是权重不同, 每个神经元有11x11x3=364个参数和1个偏差, 最终得到290400x364=105,705,600个参数, 这显然是一个参数灾难, `参数共享`就是解决这一问题的

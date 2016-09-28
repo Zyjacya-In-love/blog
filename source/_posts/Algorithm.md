@@ -1,7 +1,10 @@
 ---
-title: 基本数据结构
+title: Data Structure
 date: 2016-07-20 13:13:38
 tags:
+  - 数据结构
+categories:
+  - 算法
 ---
 ### **链表的基本概念**
 

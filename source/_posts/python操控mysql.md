@@ -1,6 +1,5 @@
 ---
-
-title: 用python操控mysql
+title: Python操控mysql
 date: 2016-05-17 20:23:24
 tags:
 - Python

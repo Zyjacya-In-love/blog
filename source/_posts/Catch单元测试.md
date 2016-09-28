@@ -5,6 +5,8 @@ toc: true
 tags:
   - Cpp
   - 单元测试
+categories:
+  - DevTools 
 ---
 
 最近在写C++的一些小程序, 在书上讲到测试驱动开发的方法, 也就是TDD(Test-Driven Development), 所以要打算掌握单元测试方法, 至少自己在写算法题的时候可以自己测试代码的健壮性, 从网上了解了一个C++的测试工具叫`Catch`, 看是来十分简单友好, 来学习一下

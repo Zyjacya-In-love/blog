@@ -5,7 +5,7 @@ toc: true
 tags:
   - Github
 categories:
-  - 笔记
+  - DevTools 
 ---
 在玩儿Github的过程中, 自己的博客就是搭在Github Page上的, 在用caffe的过程中, [Netscope](http://ethereon.github.io/netscope/quickstart.html) 可以直接可视化`Github Gist`分享的`.prototxt`文件, 整理Github相关的用法 
 <!--more-->

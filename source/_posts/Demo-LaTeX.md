@@ -4,6 +4,8 @@ date: 2015-12-21 20:53:35
 toc: true
 tags: 
 - LaTeX
+categories:
+  - DevTools 
 ---
 
 最近在学习机器学习和神经网络的一些知识, 在用Markdown做笔记的时候, 发现公式用到LaTeX十分方便, 写篇文章记录在学习过程中的常用的LaTeX公式和用法, 因为本博客支持MathJax, `MathJax`是一款运行在浏览器中的开源的数学符号渲染引擎，使用MathJax可以方便的在浏览器中显示数学公式，MathJax可以解析`Latex`、`MathML`和`ASCIIMathML`的标记语言。

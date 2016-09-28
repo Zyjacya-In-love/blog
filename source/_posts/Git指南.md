@@ -5,7 +5,7 @@ toc: true
 tags:
   - Git
 categories:
-  - 笔记
+  - DevTools 
 ---
 
 在一开始接触实验室项目的时候, 用的是SVN, 后来把自己写的东西分享到Github上开始接触Git, 整理一下常用知识点, 详细内容参考[Git Pro](http://iissnan.com/progit/)

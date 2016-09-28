@@ -1,7 +1,9 @@
 ---
 title: Hexo去除代码块滑动条
 tags:
-- Hexo
+  - Hexo
+categories:
+  - DevTools 
 date: 2016-07-07 17:48:52
 ---
 

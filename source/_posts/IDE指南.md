@@ -3,7 +3,9 @@ title: IDE指南
 date: 2016-08-11 09:34:19
 toc: true
 tags:
-- IDE
+  - IDE
+categories:
+  - DevTools 
 ---
 记录常用IDE的使用, 自己常用的IDE有Jetbrains家族的`IDEA`,`Pycharm`,`DataGrip`,在写C++代码时候用`Visual studio`, 平时练习算法和数据结构用`CodeBlocks`
 <!--more-->
@@ -58,6 +60,27 @@ tags:
 4. 最后在项目的`out/artifacts/`目录找输出的jar包
 
 ### **VS2013**
+
+> **链接库**
+
+`配置属性`->`C/C++`的附加包含目录
+
+`链接器`->`常规`的附加库目录
+`链接器`->`输入`的附加依赖项
+
+
+> **相对路径**
+
+`相对路径`就是相当于工程文件（XXXX.vcproj）为起点零计算出的能找到包含所需头文件（也就是找包含所需头文件的include目录）的路径。
+- 例如你的工程文件（Count.vcproj）所在目录路径为：`E:\projects\Count\Count\Count.vcproj`, 该工程需要包含一个图片参数，该图片所在路径如下：`E:\projects\Count\pic\pic01.jpg`
+这里程序中的相对路径设置如下：
+
+- `..\\pic\\pic02.jpg`
+
+程序代码中的参数路径设置时要用双斜线或者单反斜线`/`：
+例如：
+`#include "..\TestLib\lib.h"`
+`#pragma comment(lib,"..\\debug\\TestLib.lib");`
 
 > **项目相关的快捷键**
 
