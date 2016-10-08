@@ -11,6 +11,10 @@ categories:
 
 <!--more-->
 
+### **常用仓库**
+
+[阿里云Hub](https://dev.aliyun.com/search.html)
+
 ### **基本结构**
 
 Dockerfile 由一行行命令语句组成，并且支持以 `#` 开头的注释行。

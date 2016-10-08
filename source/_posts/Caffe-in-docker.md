@@ -1,6 +1,7 @@
 ---
 title: Caffe in Docker
 date: 2016-08-21 16:35:56
+toc: true
 tags:
   - Docker
   - Caffe
@@ -16,32 +17,33 @@ categories:
 
 
 ```
-+------------------------------------------------------+                       
-| NVIDIA-SMI 352.93     Driver Version: 352.93         |                       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 367.48                 Driver Version: 367.48                    |
 |-------------------------------+----------------------+----------------------+
 | GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
 | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
 |===============================+======================+======================|
 |   0  Tesla K40m          Off  | 0000:02:00.0     Off |                    0 |
-| N/A   37C    P0    62W / 235W |     55MiB / 11519MiB |      0%      Default |
+| N/A   31C    P0    62W / 235W |      0MiB / 11439MiB |      0%      Default |
 +-------------------------------+----------------------+----------------------+
 |   1  Tesla K40m          Off  | 0000:03:00.0     Off |                    0 |
-| N/A   40C    P0    66W / 235W |     55MiB / 11519MiB |     93%      Default |
+| N/A   34C    P0    67W / 235W |      0MiB / 11439MiB |     97%      Default |
 +-------------------------------+----------------------+----------------------+
-                                                                               
+                                                                            
 +-----------------------------------------------------------------------------+
 | Processes:                                                       GPU Memory |
 |  GPU       PID  Type  Process name                               Usage      |
 |=============================================================================|
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
+
 ```
 
-- 驱动版本是`352.93`
+- 驱动版本是`367.48`
 - 2片GPU`Tesla K40m`
-- 操作系统`cenos6.7`
+- 操作系统`cenos7.0`
 
-看到这两块GPU简直不能开心更多, 绝对的神器啊
+看到这两块GPU简直不能开心更多, 绝对的神器
 
 ### **查看Dockerfile**
 
@@ -56,10 +58,10 @@ categories:
 遇到的问题:
 1. 要求`docker-engine`和`docker-io`冲突, 用`sudo yum remove docker-io` ,然后`sudo yum remove docker-engine`就可以了
 2. `Are you trying to connect to a TLS-enabled daemon without TLS?`
-    查看docker进程`ps -ef|grep docker`, 启动docker`sudo service docker start`
+    查看docker进程`ps -ef|grep docker`, 启动docker`sudo service docker start`或者``
     
     
-### **安装caffe image**
+### **Caffe image**
 
 1. `sudo docker login`
 
@@ -67,7 +69,7 @@ categories:
 
 3. `sudo docker pull kaixhin/caffe` 
 
-### dockerfile创建镜像
+### **dockerfile**
 
 > 创建过程见 [Dockerfile创建镜像](http://simtalk.cn/2016/08/21/Dockerfile%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F/)
 
@@ -81,4 +83,27 @@ categories:
 
 `sudo docker build -t caffe:gpu ./`
 
+**阿里云镜像**
+
+`sudo docker pull registry.cn-hangzhou.aliyuncs.com/alicloudhpc/toolkit`
+
+   - Pull镜像
+
+`sudo docker tag 2593ae802092 caffe:shangyan`
+
+   - 重命名镜像
+   
+`sudo docker rmi registry.cn-hangzhou.aliyuncs.com/alicloudhpc/toolkit:latest`
+
+   - 取消原来的Tag
+
+### **创建容器**
+
+`sudo sudo docker run -t -i caffe:shangyan /bin/bash`
+
+   - 创建容器
+   
+`cd /root/caffe`
+
+   - 进入caffe目录
 

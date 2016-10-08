@@ -48,11 +48,13 @@ convolution_param{
 - [Caffe Prototxt Generator](http://yanglei.me/gen_proto/)
 - [Netscope](http://ethereon.github.io/netscope/quickstart.html)
 
-> caffe的安装网上有太多的教程, 过程也十分的繁琐, 祝好运
+> Caffe的安装网上有太多的教程, 过程也十分的繁琐, 祝好运
 
 ### **运行cifar10实例**
 
-- [cifar-10数据库](https://www.cs.toronto.edu/~kriz/cifar.html), cifar10数据训练样本50000张，测试样本10000张，每张为32*32的彩色三通道图片，共分为10类。
+- [cifar-10数据库](https://www.cs.toronto.edu/~kriz/cifar.html), cifar10数据训练样本50000张，测试样本10000张，每张为32*32的彩色三通道图片，共分为10类
+
+![](\img\Caffe-in-Action\cifar10.jpg)
 
 - [Cifar10-Github](https://github.com/BVLC/caffe/tree/master/examples/cifar10)
 
@@ -75,6 +77,10 @@ convolution_param{
    Test net output #1: loss = 0.756731 (* 1 = 0.756731 loss)
    Optimization Done.
    ```
+   
+### **特征抽取**
+
+
 
 ### **编译Python接口**
 
@@ -93,9 +99,3 @@ convolution_param{
 6. 将这个caffe文件夹复制到`C:\Anaconda2\Lib\site-packages`中，然后尝试使用import caffe
 
    - import可能会出现`typeerror:__init__()got an unexpected keyword argument 'syntax'`这样的错误，解决的办法是在`C:\Anaconda2\Lib\site-packages\caffe\proto`中选择`caffe_pb2.py`文件，将文件中所有含有`syntax`的语句注释掉即可
-   
-   
-   
-   
-
-
