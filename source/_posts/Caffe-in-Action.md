@@ -80,6 +80,8 @@ convolution_param{
    
 ### **特征抽取**
 
+[caffeModle](http://dl.caffe.berkeleyvision.org/)下载地址
+
 
 
 ### **编译Python接口**

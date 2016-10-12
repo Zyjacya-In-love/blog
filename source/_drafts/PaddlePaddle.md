@@ -20,10 +20,4 @@ date: 2016-10-01 11:26:51
    
 2. 创建Paddle容器
 
-   
-
-
-
-
-
 [源码浏览](http://162.243.141.242/paddle_html/codebrowser/codebrowser/paddle/)

@@ -3,10 +3,9 @@ title: Caffe in Docker
 date: 2016-08-21 16:35:56
 toc: true
 tags:
-  - Docker
   - Caffe
 categories:
-  - Linux
+  - Docker
 ---
 搭建基于docker的caffe运行环境, 之前在自己的Ubuntu上搭建caffe环境4次失败, 每次由于驱动问题将GUI搞垮, 将GUI搞回来驱动又不兼容, 很是折腾, 用docker吧
 <!--more-->
@@ -99,11 +98,75 @@ categories:
 
 ### **创建容器**
 
-`sudo sudo docker run -t -i caffe:shangyan /bin/bash`
+`sudo docker run -i -t -d -P --name caffe_shangyan -v /home/shang:/home/ caffe21:shangyan`
 
-   - 创建容器
+   - 创建caffe容器, 将主机的`/home/shang`挂载到容器的`/home/`下面
    
 `cd /root/caffe`
 
    - 进入caffe目录
+   
+### **常见错误**
+
+> libcudart.so.7.0: cannot open shared object file: No such file or directory
+
+- `export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH`
+
+### **GPU设置**
+
+1. 需要使用GPU的用户，最好先检查物理机上的GPU状态是否正常，运行：
+   
+   `nvidia-smi`或者`/usr/local/cuda/samples/1_Utilities/deviceQuery/deviceQuery`
+   
+2. 将下面内容存为`caffedocker`的文件里, `chmod +x caffedocker`变为可执行文件, `sudo ./caffedocker caffe:shangyan /bin/bash`
+
+```
+#!/bin/bash
+DOCKER_BIN="/usr/bin/docker"
+INTERACT="-ti"
+#INTERACT="-d"
+DATA_VOLUME="/disk1"
+DATA_MOUNT_POINT="/disk1"
+MEM_LIMIT=96g
+set -e
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 image command"
+    exit -1
+else
+    IMAGE=$1
+    shift 1
+    CMD=$@
+fi
+devices=$(ls -1 /dev | grep nvidia)
+dev_param=""
+for d in $devices; do
+    dev_param="$dev_param --device=/dev/$d"
+done
+time_param='-v /etc/localtime:/etc/localtime:ro'
+if [ ! -z "$CUDA_VISIBLE_DEVICES" ]; then
+    dev_env="-e CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
+else
+    dev_env=""
+fi
+exec $DOCKER_BIN run \
+        "$INTERACT" \
+        -P \
+        $dev_env \
+        $dev_param \
+        $time_param \
+        -m $MEM_LIMIT \
+        -v $DATA_VOLUME:$DATA_MOUNT_POINT \
+        "$IMAGE" \
+        $CMD
+```
+
+- 成功运行之后，已经进入交互式的docker容器（理解为一个与host隔离的运行环境）中，物理机上的 /disk1 磁盘映射到容器内的 /disk1 文件夹，建议数据只存储到 /disk1 下（如果容器销毁，其他数据不会保留）。
+
+检查GPU工作正常：
+
+ `nvidia-smi`
+
+检查通过以后，您可以像普通终端一样，运行软件
+
+> [深度学习和HPC工具集用户手册](https://help.aliyun.com/document_detail/25848.html)
 

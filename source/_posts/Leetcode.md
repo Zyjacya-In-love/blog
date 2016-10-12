@@ -19,6 +19,12 @@ categories:
 
 ### **LeetCode**
 
+#### **Array(数组)**
+
+[26. Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
+
+   - 双指针, 由于是排好序的数组, 设置一个初始化的index和遍历下标i
+
 #### **String(字符串)**
 
 [344. Reverse String](https://leetcode.com/problems/reverse-string/)
@@ -30,6 +36,8 @@ categories:
   代码实现 : 
   [C++](https://github.com/Simshang/LeetcodeCpp/blob/master/LeetcodeCpp/ReverseString.cpp) 
   [Java](https://github.com/Simshang/LeetCode/blob/master/src/ReverseString.java)
+  
+  
   
 
 
