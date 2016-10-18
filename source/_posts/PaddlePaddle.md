@@ -7,7 +7,7 @@ categories:
   - 深度学习
 date: 2016-10-12 19:26:51
 ---
-在2016百度世界大会上开源的深度学习框架[Paddle](https://github.com/baidu/Paddle)
+在2016百度世界大会上开源的分布式深度学习框架[Paddle](https://github.com/baidu/Paddle)
 <!--more-->
 
 ### **Docker install**
@@ -34,6 +34,8 @@ date: 2016-10-12 19:26:51
 ### **快速入门**
 
 [Paddle开发文档](http://www.paddlepaddle.org/doc_cn/demo/quick_start/index.html)
+
+看了极客头条的 [基于Spark的异构分布式深度学习平台](http://geek.csdn.net/news/detail/58867)文章特别期待Spark on Paddle,  [相关视频](https://spark-summit.org/2016/events/scalable-deep-learning-platform-on-spark-in-baidu/)
 
 
 
