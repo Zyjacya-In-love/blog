@@ -56,6 +56,21 @@ def cause_a_to_do_something():
 #
 ```
 
+### **文件操作**
+
+> 将输出存为txt的时候的换行问题
+
+ASCII码中的换行符与回车符：
+- 换行符 10 LF '\n'
+- 回车符 13 CR '\r'
+
+在操作系统的历史中，有很多种方法来表示另起一行，但'\n'和'\r'是最常用的方式，目前主流操作系统的行结束符号如下所示：
+
+|操作系统	|字符组合|
+|------|-------|
+|UNIX & Mac OS X| '\n'|
+|Mac(pre OS X)|	 '\r' |
+|MS Windows|	'\r\n'|
 
 ### **问题**
 记录在python开发过程中,常见的错误以及解决方法.
@@ -77,3 +92,5 @@ def cause_a_to_do_something():
 >   报错信息 : Unresolved reference issue in PyCharm
 
 -   设置root目录 [stackoverflow](http://stackoverflow.com/questions/21236824/unresolved-reference-issue-in-pycharm) 
+
+
