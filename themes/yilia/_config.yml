@@ -55,7 +55,7 @@ tagcloud: true
 #不开启——
 #aboutme: false
 #开启——
-aboutme: 北邮在读，深度学习调参中，Caffe源码钻研中，下一个目标是Paddle，路漫漫其修远兮，吾将上下而求索
+aboutme: 北邮在读，计算机视觉与机器学习，正在实践特定文字识别和文本分析。
 #是否开启友情链接
 #不开启——
 friends: false

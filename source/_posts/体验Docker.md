@@ -3,7 +3,7 @@ title: 体验Docker
 date: 2016-07-26 16:45:49
 toc: true
 tags:
-  - Guide
+  - Docker
 categories:
   - Docker
 ---

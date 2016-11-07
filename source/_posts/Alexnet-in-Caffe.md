@@ -86,11 +86,55 @@ categories:
    
    - 输入是$4096$维的向量, 输出是$1000$维的向量, 所以含有1000个神经元
 
+### **ReLU**
 
-### **Local Response Normalization**
+ReLU（Rectified Linear Units）是神经网络中的激活函数, 其形式为$f(x)=max(x,0)$, 是不饱和线性函数, 最原始的神经网络输出函数是`sigmoid：` $f(x)=(1+e^{-x})^{-1}$ 或者 `tanh:` $f(x) = tanh(x)$, 它们是饱和线性函数
+
+- [常用激活函数详解](http://simtalk.cn/2016/09/08/Neural-Network/#常用激活函数)
+
+### **LRN**
+
+LRN(Local Response Normalization)是局部正则化层, 虽然ReLU层对于很大的输入x，仍然可以有效的学习(因为反向梯度不会消失)，但是他们发现即使这样，对数据进行归一化对于学习来说还是有帮助的, 定义如下:
+
+$$b\_{x,y}^{i} = a\_{x,y}^{i}/(k+\alpha \sum\_{j=max(0,i-n/2)}^{min(N-1,i+n/2)}(a\_{x,y}^{i})^{2})^{\beta}$$
+
+- $a_{x,y}^{i}$是以第$i$个卷积核计算得到的Map值, 即经过神经元中的激活函数后的输出值
+- $N$ 是该层的`feature map`总数
+- $n$表示取该`feature map`为中间的左右各n/2个feature map来求均值
+- $b_{x,y}^{i}$是下一层的输入
+
+论文中的参数$k=2,n=5,\alpha=10^{-4},\beta = 0.75$, 每一层ReLU后面都接一层LRN, 论文中提到使用LRN来训练他们的网络, 在ImageNet上`top-1`和`top-5`的错误率分别下降了`1.4%`和`1.2%`
+
+### **Overlapping Pooling**
+
+Pooling层一般用于降维, 在一个区域内取平均或取最大值, 作为这一个小区域内的特征传递到下一层, 传统的Pooling层是不重叠的, 而本论文提出使Pooling层相邻池化窗口之间会有重叠区域, 可以减少信息的损失, 可以降低错误率，而且对防止过拟合有一定的效果。
+
+### **Data Augmentation**
+
+- 为了防止过拟合论文进行了数据增广, 将原始图像进行平移, 水平翻转等变换
+- 对图片的RGB通道进行强度改变, 在训练集的RGB通道上做PCA, 但是不降维, 只取特征向量和特征值, 对训练集上每张图片的每个像素$I\_{x,y}=[I\_{x,y}^{R},I\_{x,y}^{G},I\_{x,y}^{B}]^{T}$加上下面的值形成新的训练数据
+
+$$[p\_{1},p\_{2},p\_{3}][\alpha\_{1}\lambda\_{1},\alpha\_{2}\lambda\_{2},\alpha\_{3}\lambda\_{3}]^{T}$$
+ 
+- 其中, $p_{i}$表示特征向量, $\lambda_{i}$表示特征值, $\alpha$表示均值为0，方差为0.1的高斯随机变量
+
+论文中表示将top-1误差降低了1%
 
 ### **Dropout**
 
+Dropout层一般用在FC层之后, 每次forward的时候FC之前层的每个神经元会以一定的概率不参与前向传播, 而后向传播的时候这些单元也不参与, 这种方式使得网络以部分神经元来表示当前的特征，相当于间接降低了模型的复杂度, 很大程度上降低了过拟合。
+
+- [Dropout详解](http://simtalk.cn/2016/09/09/Neural-Network-in-Practice/#随机失活Dropout)
+
+### **参数更新**
+
+$$v\_{i+1}=0.9 \cdot v\_{i} - 0.0005 \cdot lr \cdot \omega\_{i} - lr \cdot \langle \frac{\partial L}{\partial \omega}|\_{\omega\_{i}}\rangle\_{D\_{i}}$$
+
+$$\omega\_{i+1} = \omega\_{i}+v\_{i+1}$$
+
+- 其中，$\omega$是最后的结果，$v$是增量，$lr$是学习率，$0.0005$是weight decay的值，$0.9$是momentum的系数
+
+- [参数更新详解](http://simtalk.cn/2016/09/09/Neural-Network-in-Practice/#参数更新)
 
 ### **实践AlexNet**
 
