@@ -85,3 +85,11 @@ aptitude autoclean 仅删除过期的包文件
 - 统计命令执行时间
 
 `time + [命令内容]` 命令可以用来统计命令执行时间，这部分时间包括总的运行时间，用户空间执行时间，内核空间执行时间，它通过 ptrace 系统调用实现。
+
+### **输出重定向**
+
+`command > file` : 表示输出重定向, 输出重定向会覆盖文件内容
+
+`>>` : 表示不重写文件 , 追加输出
+
+`&>` : `./build/tools/caffe train --solver=examples/mnist/lenet_lr_solver.prototxt &> log.txt` 

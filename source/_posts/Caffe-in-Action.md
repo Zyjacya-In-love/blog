@@ -50,7 +50,13 @@ convolution_param{
 
 > Caffe的安装网上有太多的教程, 过程也十分的繁琐, 祝好运
 
-### **运行cifar10实例**
+### **mnist**
+
+[LeNet的prototxt](https://gist.github.com/Simshang/ce2220b61da453ac41c9e0b4dd447340)
+
+[LeNet的网络结构图](http://ethereon.github.io/netscope/#/gist/ce2220b61da453ac41c9e0b4dd447340)
+
+### **cifar10实例**
 
 - [cifar-10数据库](https://www.cs.toronto.edu/~kriz/cifar.html), cifar10数据训练样本50000张，测试样本10000张，每张为32*32的彩色三通道图片，共分为10类
 
@@ -77,6 +83,8 @@ convolution_param{
    Test net output #1: loss = 0.756731 (* 1 = 0.756731 loss)
    Optimization Done.
    ```
+   
+- 在`XXX_solver.prototxt`中更改CPU和GPU的模式
    
 ### **特征抽取**
 
