@@ -88,8 +88,11 @@ convolution_param{
    
 ### **特征抽取**
 
-[caffeModle](http://dl.caffe.berkeleyvision.org/)下载地址
+在[CaffeModle目录](http://dl.caffe.berkeleyvision.org/)中下载AlexNet的caffemodel
 
+[feature extraction官方教程](http://caffe.berkeleyvision.org/gathered/examples/feature_extraction.html)
+
+[可视化特征的python文件](http://nbviewer.jupyter.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb)
 
 
 ### **编译Python接口**
@@ -108,4 +111,4 @@ convolution_param{
    
 6. 将这个caffe文件夹复制到`C:\Anaconda2\Lib\site-packages`中，然后尝试使用import caffe
 
-   - import可能会出现`typeerror:__init__()got an unexpected keyword argument 'syntax'`这样的错误，解决的办法是在`C:\Anaconda2\Lib\site-packages\caffe\proto`中选择`caffe_pb2.py`文件，将文件中所有含有`syntax`的语句注释掉即可
+  - import可能会出现`typeerror:__init__()got an unexpected keyword argument 'syntax'`这样的错误，解决的办法是在`C:\Anaconda2\Lib\site-packages\caffe\proto`中选择`caffe_pb2.py`文件，将文件中所有含有`syntax`的语句注释掉即可

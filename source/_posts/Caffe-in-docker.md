@@ -42,7 +42,7 @@ categories:
 - 2片GPU`Tesla K40m`
 - 操作系统`cenos7.0`
 
-看到这两块GPU简直不能开心更多, 绝对的神器
+看到这两块GPU简直不能开心更多
 
 ### **查看Dockerfile**
 
@@ -84,6 +84,8 @@ categories:
 
 **阿里云镜像**
 
+在`21天实战Caffe`提供的GPU版本的Caffe镜像
+
 `sudo docker pull registry.cn-hangzhou.aliyuncs.com/alicloudhpc/toolkit`
 
    - Pull镜像
@@ -102,6 +104,10 @@ categories:
 
    - 创建caffe容器, 将主机的`/home/shang`挂载到容器的`/home/`下面
    
+`sudo docker run --privileged=true  -i -t -d -P --name caffe_gpu_shangyan -v /home/shang:/home/ caffe21_gpu:shangyan`
+
+  - 创建GPU版本的Caffe容器, 将主机的`/home/shang`挂载到容器的`/home/`下面
+   
 `cd /root/caffe`
 
    - 进入caffe目录
@@ -110,7 +116,12 @@ categories:
 
 > libcudart.so.7.0: cannot open shared object file: No such file or directory
 
-- `export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH`
+- `cd ~`更改`.profile`文件, 添加`export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH`, 最后`source ./.profile`文件
+
+> 驱动冲突 : Failed to initialize NVML: GPU access blocked by the operating system
+> 驱动版本不匹配 : Failed to initialize NVML: Driver/library version mismatch
+
+- Host上的驱动和容器内的驱动不一致
 
 ### **GPU设置**
 
@@ -165,8 +176,28 @@ exec $DOCKER_BIN run \
 检查GPU工作正常：
 
  `nvidia-smi`
+ 
+```
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 367.57                 Driver Version: 367.57                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla K40m          Off  | 0000:02:00.0     Off |                    0 |
+| N/A   26C    P0    61W / 235W |      0MiB / 11439MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   1  Tesla K40m          Off  | 0000:03:00.0     Off |                    0 |
+| N/A   28C    P0    62W / 235W |      0MiB / 11439MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   2  Tesla K40m          Off  | 0000:82:00.0     Off |                    0 |
+| N/A   43C    P0    63W / 235W |      0MiB / 11439MiB |     82%      Default |
++-------------------------------+----------------------+----------------------+
+```
 
 检查通过以后，您可以像普通终端一样，运行软件
 
 > [深度学习和HPC工具集用户手册](https://help.aliyun.com/document_detail/25848.html)
+
+
 
