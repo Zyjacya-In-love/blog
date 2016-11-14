@@ -129,6 +129,8 @@ categories:
    
    `nvidia-smi`或者`/usr/local/cuda/samples/1_Utilities/deviceQuery/deviceQuery`
    
+   - 在`dev`文件夹中查看硬件是否存在
+   
 2. 将下面内容存为`caffedocker`的文件里, `chmod +x caffedocker`变为可执行文件, `sudo ./caffedocker caffe:shangyan /bin/bash`
 
 ```
@@ -196,6 +198,10 @@ exec $DOCKER_BIN run \
 ```
 
 检查通过以后，您可以像普通终端一样，运行软件
+
+### 多卡训练
+
+在命令后面加参数`-gpu 0,1,2` (三卡并行)
 
 > [深度学习和HPC工具集用户手册](https://help.aliyun.com/document_detail/25848.html)
 
