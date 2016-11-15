@@ -112,3 +112,33 @@ convolution_param{
 6. 将这个caffe文件夹复制到`C:\Anaconda2\Lib\site-packages`中，然后尝试使用import caffe
 
   - import可能会出现`typeerror:__init__()got an unexpected keyword argument 'syntax'`这样的错误，解决的办法是在`C:\Anaconda2\Lib\site-packages\caffe\proto`中选择`caffe_pb2.py`文件，将文件中所有含有`syntax`的语句注释掉即可
+  
+> centos
+
+- 编译：
+```
+$ cd ~/caffe
+$ make pycaffe
+```
+
+- 配置:
+
+```
+$ sudo gedit /etc/profile
+
+# 添加： export PYTHONPATH=/root/caffe/python:$PYTHONPATH 
+
+$ source /etc/profile # 使之生效
+```
+
+- 测试:
+
+```
+$ python
+Python 2.7.6 (default, Jun 22 2015, 17:58:13) 
+[GCC 4.8.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import caffe
+>>> 
+```
+
