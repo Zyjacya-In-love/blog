@@ -36,6 +36,8 @@ date: 2016-10-11 11:34:34
 ### **文件解析**
 
 `caffe.proto`位于…\src\caffe\proto目录下，在这个文件夹下还有一个.pb.cc和一个.pb.h文件，这两个文件都是由caffe.proto编译而来的。 
+
+[caffe.proto](https://github.com/BVLC/caffe/blob/master/src/caffe/proto/caffe.proto)的内容
            
 在caffe.proto中定义了很多结构化数据，包括：
 
@@ -61,4 +63,6 @@ date: 2016-10-11 11:34:34
 - PowerParameter
 - WindowDataParameter
 - V0LayerParameter
+
+
 

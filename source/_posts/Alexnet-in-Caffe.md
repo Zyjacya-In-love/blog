@@ -88,13 +88,15 @@ categories:
 
 ### **ReLU**
 
-ReLU（Rectified Linear Units）是神经网络中的激活函数, 其形式为$f(x)=max(x,0)$, 是不饱和线性函数, 最原始的神经网络输出函数是`sigmoid：` $f(x)=(1+e^{-x})^{-1}$ 或者 `tanh:` $f(x) = tanh(x)$, 它们是饱和线性函数
+ReLU（Rectified Linear Units）是神经网络中的激活函数, 其形式为$f(x)=max(x,0)$, 是不饱和线性函数, 最原始的神经网络输出函数是`sigmoid：` $f(x)=(1+e^{-x})^{-1}$ 或者 `tanh:` $f(x) = tanh(x)$, 它们是饱和线性函数, 饱和的线性函数很容易出现梯度消失的问题, 采用ReLU函数可以使得网络做的更深, 在训练时间上，非饱和函数比饱和函数训练更快
 
 - [常用激活函数详解](http://simtalk.cn/2016/09/08/Neural-Network/#常用激活函数)
 
 ### **LRN**
 
-LRN(Local Response Normalization)是局部正则化层, 虽然ReLU层对于很大的输入x，仍然可以有效的学习(因为反向梯度不会消失)，但是他们发现即使这样，对数据进行归一化对于学习来说还是有帮助的, 定义如下:
+LRN(Local Response Normalization)是局部响应归一化, 选取临近的n个特征图，在特征图的同一个空间位置（x,y）,依次平方，然后求和，在乘以alpha，在加上K, ReLU函数不需要归一化来防止饱和现象，如果没有神经元产生一个正的激活值，学习就会在这个神经元发生, 但是作者发现局部归一化会帮助泛化。 
+
+定义如下:
 
 $$b\_{x,y}^{i} = a\_{x,y}^{i}/(k+\alpha \sum\_{j=max(0,i-n/2)}^{min(N-1,i+n/2)}(a\_{x,y}^{i})^{2})^{\beta}$$
 
@@ -102,8 +104,7 @@ $$b\_{x,y}^{i} = a\_{x,y}^{i}/(k+\alpha \sum\_{j=max(0,i-n/2)}^{min(N-1,i+n/2)}(
 - $N$ 是该层的`feature map`总数
 - $n$表示取该`feature map`为中间的左右各n/2个feature map来求均值
 - $b_{x,y}^{i}$是下一层的输入
-
-论文中的参数$k=2,n=5,\alpha=10^{-4},\beta = 0.75$, 每一层ReLU后面都接一层LRN, 论文中提到使用LRN来训练他们的网络, 在ImageNet上`top-1`和`top-5`的错误率分别下降了`1.4%`和`1.2%`
+本文的归一化只是多个特征图同一个位置上的归一化，属于特征图之间的局部归一化（属于纵向归一化）, 论文中在特征图之间基础上还有同一特征图内邻域位置像素的归一化（横向，纵向归一化结合）, 归一化方法没有减去均值，因为ReLU只对正值部分产生学习，如果减去均值会丢失掉很多信息, 论文中的参数$k=2,n=5,\alpha=10^{-4},\beta = 0.75$, 每一层ReLU后面都接一层LRN, 论文中提到使用LRN来训练他们的网络, 在ImageNet上`top-1`和`top-5`的错误率分别下降了`1.4%`和`1.2%`
 
 ### **Overlapping Pooling**
 
@@ -112,27 +113,37 @@ Pooling层一般用于降维, 在一个区域内取平均或取最大值, 作为
 ### **Data Augmentation**
 
 - 为了防止过拟合论文进行了数据增广, 将原始图像进行平移, 水平翻转等变换
+
+![](\img\Alexnet-in-Caffe\dataAu.jpg)
+
+原始图像为一个大图a，想把一短边缩小到256维得到b，然后在b的中心取$256\*256$的正方形图片得到c，然后在c上随机提取(256-224=32)$224\*224$的小图片作为训练样本，然后在结合图像水平反转(x2)来增加样本达到数据增益。这种增益方法是样本增加了2048(32x32x2)倍，允许我们运行更大的网络。
+
 - 对图片的RGB通道进行强度改变, 在训练集的RGB通道上做PCA, 但是不降维, 只取特征向量和特征值, 对训练集上每张图片的每个像素$I\_{x,y}=[I\_{x,y}^{R},I\_{x,y}^{G},I\_{x,y}^{B}]^{T}$加上下面的值形成新的训练数据
 
 $$[p\_{1},p\_{2},p\_{3}][\alpha\_{1}\lambda\_{1},\alpha\_{2}\lambda\_{2},\alpha\_{3}\lambda\_{3}]^{T}$$
  
-- 其中, $p_{i}$表示特征向量, $\lambda_{i}$表示特征值, $\alpha$表示均值为0，方差为0.1的高斯随机变量
+- 其中, $p\_{i}$表示特征向量, $\lambda\_{i}$表示特征值, $\alpha$表示均值为0，方差为0.1的高斯随机变量
 
 论文中表示将top-1误差降低了1%
 
 ### **Dropout**
 
-Dropout层一般用在FC层之后, 每次forward的时候FC之前层的每个神经元会以一定的概率不参与前向传播, 而后向传播的时候这些单元也不参与, 这种方式使得网络以部分神经元来表示当前的特征，相当于间接降低了模型的复杂度, 很大程度上降低了过拟合。
+Dropout层一般用在FC层之后, 每次forward的时候FC之前层的每个神经元会以一定的概率不参与前向传播, 而后向传播的时候这些单元也不参与, 这种方式使得网络以部分神经元来表示当前的特征，相当于间接降低了模型的复杂度, 很大程度上降低了过拟合。具体做法是以0.5的概率将每个隐层神经元的输出设置为零, 被“dropped out”的神经元既不参与前向传播，也不参与反向传播。在测试时，我们将所有神经元的输出都仅仅只乘以0.5
 
 - [Dropout详解](http://simtalk.cn/2016/09/09/Neural-Network-in-Practice/#随机失活Dropout)
+- [Dropout: A Simple Way to Prevent Neural Networks from Overfitting-PDF](https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf)
 
 ### **参数更新**
+
+使用带动量项的梯度下降法SGD:
 
 $$v\_{i+1}=0.9 \cdot v\_{i} - 0.0005 \cdot lr \cdot \omega\_{i} - lr \cdot \langle \frac{\partial L}{\partial \omega}|\_{\omega\_{i}}\rangle\_{D\_{i}}$$
 
 $$\omega\_{i+1} = \omega\_{i}+v\_{i+1}$$
 
-- 其中，$\omega$是最后的结果，$v$是增量，$lr$是学习率，$0.0005$是weight decay的值，$0.9$是momentum的系数
+- 其中，$\omega$是最后的结果，$v$是增量，权值削减$0.0005$是weight decay的值，$0.9$是momentum的系数, 批量$D=128$
+- 该模型用均值为0、标准差为0.01的高斯分布初始化每一层的权重, 用常数1初始化第二、第四和第五个卷积层以及全连接隐层的神经元偏差, 在其余层用常数0初始化神经元偏差
+- $lr$是学习率，初始为0.01，启发式方式: 当验证误差率在当前学习率下不再提高时，就将学习率除以10。
 
 - [参数更新详解](http://simtalk.cn/2016/09/09/Neural-Network-in-Practice/#参数更新)
 
@@ -142,8 +153,27 @@ $$\omega\_{i+1} = \omega\_{i}+v\_{i+1}$$
 
 [Caffe各层的功能](http://caffe.berkeleyvision.org/tutorial/layers.html)
 
+**测试方法**
+
+在$256\*256$图片的四角和中心提取5个$224\*224$片段，在水平翻转后形成10个样本，输入网络结果求平均。
+
+**结果** :
+
+在ILSVRC2012上，单个模型的top-5结果为18.2%；5个模型求平均结果为16.4%。
+
+- 在一个大的数据集训练网络，然后在另一现对较小的数据上finetuning网络的方式，类似transfer learning，在以后的论文中经常出现。
+
+![](\img\Alexnet-in-Caffe\result.jpg)
+
+- 从第一个卷基层卷积核可视图可以看出，卷积核具有方向，“频率”选择性，还有一些圆点状的, 也有许多死的卷积核；
+- 无论在什么初始值下，值得注意的是两个GPU学习到的卷积核不一样，GPU1学习到的特征不具有颜色特征，GPU2学习到的特征大部分体现了颜色特征，相同的结构，学习的卷积核却不同
+
+另一个值得注意的地方就是在最后的一个具有4096个神经元的全连接层，通过计算欧氏距离，欧氏距离比较近的图片具有相似的图片对象。说明网络确实提取到了有用的特征，此外作者还介绍可以通过在4096处的输出，通过一个Autoencoder算法，来生产一个维数较少的二元向量，这样就可以通过比较这个维数较小的向量来进行图像检索。
+
 ### **相关资料**
 
 1. Original paper: **"ImageNet Classification with Deep Convolutional Neural Networks"** [[PDF](http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf)]
 
 2. PPT : **Deep Convolutional Neural Networks for Image Classification** [PPT](http://slazebni.cs.illinois.edu/spring14/lec24_cnn.pdf)
+
+3. [参考博客](http://blog.csdn.net/whiteinblue/article/details/43202399)
