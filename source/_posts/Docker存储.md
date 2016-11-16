@@ -181,7 +181,7 @@ shm                                                                             
 
 通过导出导入给容器瘦身
 
-`sudo docker export (CID) | docker import - base`
+`sudo docker export $(CID) | docker import - base`
 
 
 
