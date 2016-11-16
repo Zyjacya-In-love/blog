@@ -7,9 +7,12 @@ tags:
 categories:
   - Docker
 ---
-搭建基于docker的caffe运行环境, 之前在自己的Ubuntu上搭建caffe环境4次失败, 每次由于驱动问题将GUI搞垮, 将GUI搞回来驱动又不兼容, 很是折腾, 用docker吧
+搭建基于docker的caffe运行环境, 之前在自己的Ubuntu上搭建caffe环境4次失败, 每次由于驱动问题将GUI搞垮, 将GUI搞回来驱动又不兼容, 很是折腾, 当然做镜像也很折腾呀, 当时可以共享给其他人, 拿走不谢! 
+
 <!--more-->
-在这里吐槽一下, 用的服务器上有两块`Tesla K40m`啊, 然而`No running processes found`, 简直是暴殄天物, 这是绝对的浪费我不能忍
+
+- [我的caffe镜像](https://dev.aliyun.com/detail.html?spm=5176.1972343.2.22.WhwQCG&repoId=17725)
+
 ### **基本环境**
 
 1. `nvidia-smi` 查看GPU以及驱动的版本
