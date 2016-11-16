@@ -7,7 +7,7 @@ categories:
   - Caffe
 date: 2016-10-11 11:34:34
 ---
-讲解caffe的网络定义文件
+讲解caffe的网络定义文件, 开启caffe的源码阅读系列
 
 <!--more-->
 
@@ -32,3 +32,33 @@ date: 2016-10-11 11:34:34
 - XML 已经成为多种行业标准的编写工具，Protobuf 只是 Google 公司内部使用的工具，在通用性上还差很多。
 
 - 由于文本并不适合用来描述数据结构，所以 Protobuf 也不适合用来对基于文本的标记文档（如 HTML）建模。另外，由于 XML 具有某种程度上的自解释性，它可以被人直接读取编辑，在这一点上 Protobuf 不行，它以二进制的方式存储，除非你有 .proto 定义，否则你没法直接读出 Protobuf 的任何内容
+
+### **文件解析**
+
+`caffe.proto`位于…\src\caffe\proto目录下，在这个文件夹下还有一个.pb.cc和一个.pb.h文件，这两个文件都是由caffe.proto编译而来的。 
+           
+在caffe.proto中定义了很多结构化数据，包括：
+
+- BlobProto
+- Datum
+- FillerParameter
+- NetParameter
+- SolverParameter
+- SolverState
+- LayerParameter
+- ConcatParameter
+- ConvolutionParameter
+- DataParameter
+- DropoutParameter
+- HDF5DataParameter
+- HDF5OutputParameter
+- ImageDataParameter
+- InfogainLossParameter
+- InnerProductParameter
+- LRNParameter
+- MemoryDataParameter
+- PoolingParameter
+- PowerParameter
+- WindowDataParameter
+- V0LayerParameter
+

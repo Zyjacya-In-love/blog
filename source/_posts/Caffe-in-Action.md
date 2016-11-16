@@ -50,13 +50,13 @@ convolution_param{
 
 > Caffe的安装网上有太多的教程, 过程也十分的繁琐, 祝好运
 
-### **mnist**
+### **Mnist**
 
 [LeNet的prototxt](https://gist.github.com/Simshang/ce2220b61da453ac41c9e0b4dd447340)
 
 [LeNet的网络结构图](http://ethereon.github.io/netscope/#/gist/ce2220b61da453ac41c9e0b4dd447340)
 
-### **cifar10实例**
+### **Cifar10**
 
 - [cifar-10数据库](https://www.cs.toronto.edu/~kriz/cifar.html), cifar10数据训练样本50000张，测试样本10000张，每张为32*32的彩色三通道图片，共分为10类
 
@@ -95,7 +95,7 @@ convolution_param{
 [可视化特征的python文件](http://nbviewer.jupyter.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb)
 
 
-### **编译Python接口**
+### **pycaffe**
 
 > 基础环境 : 安装caffe-windows和Anaconda
 
@@ -141,4 +141,21 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> import caffe
 >>> 
 ```
+
+- 导入caffe的过程中可能报错找不到protobuf, 用`pip install protobuf`安装即可 
+
+### **模型可视化**
+
+$ `python draw_net.py ../models/bvlc_reference_caffenet/train_val.prototxt caffenet.png`
+
+Drawing net to caffenet.png
+
+- 如下图所示:
+
+![](\img\Caffe-in-Action\caffenet.png)
+
+`pip install pydot==1.1.0`
+
+`apt-get install graphviz`
+
 

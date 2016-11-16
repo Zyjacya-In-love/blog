@@ -104,9 +104,10 @@ categories:
 
    - 创建caffe容器, 将主机的`/home/shang`挂载到容器的`/home/`下面
    
-`sudo docker run --privileged=true  -i -t -d -P --name caffe_gpu_shangyan -v /home/shang:/home/ caffe21_gpu:shangyan`
+`sudo docker run --privileged=true  -i -t -d -P --name caffe_gpu_shangyan -v /home/shang:/home/ caffe_gpu:shangyan`
 
   - 创建GPU版本的Caffe容器, 将主机的`/home/shang`挂载到容器的`/home/`下面
+
    
 `cd /root/caffe`
 
