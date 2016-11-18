@@ -144,18 +144,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 - 导入caffe的过程中可能报错找不到protobuf, 用`pip install protobuf`安装即可 
 
-### **模型可视化**
 
-$ `python draw_net.py ../models/bvlc_reference_caffenet/train_val.prototxt caffenet.png`
-
-Drawing net to caffenet.png
-
-- 如下图所示:
-
-![](\img\Caffe-in-Action\caffenet.png)
-
-`pip install pydot==1.1.0`
-
-`apt-get install graphviz`
 
 
