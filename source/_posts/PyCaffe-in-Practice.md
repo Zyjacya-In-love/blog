@@ -508,7 +508,9 @@ Drawing net to caffenet.png
 ![](\img\PyCaffe-in-Practice\caffenet.png)
 
 - 需要的库
+
 `pip install pydot==1.1.0`
+
 `apt-get install graphviz`
 
 > 以上代码全部经过测试, 特别感谢: [denny的学习专栏](http://www.cnblogs.com/denny402/category/759199.html)
