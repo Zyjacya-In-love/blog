@@ -8,7 +8,7 @@ categories:
   - DevTools 
 ---
 
-在一开始接触实验室项目的时候, 用的是SVN, 后来把自己写的东西分享到Github上开始接触Git, 整理一下常用知识点, 详细内容参考[Git Pro](http://iissnan.com/progit/)
+在一开始接触实验室项目的时候, 用的是SVN, 后来把自己写的东西分享到Github上开始接触Git, 整理一下常用知识点
 
 <!--more-->
 
@@ -58,7 +58,7 @@ categories:
 
 - 如果没有克隆现有仓库，并想将仓库连接到某个远程服务器，使用`remote add`添加远程分支
 
-###　**分支(brancd)**
+### **分支(brancd)**
 
 ![](/img/Git指南/branches.png)
 
@@ -109,6 +109,8 @@ categories:
 
 
 ### **更多**
+
+[Git Pro](http://iissnan.com/progit/)
 
 [git简明指南](http://rogerdudler.github.io/git-guide/index.zh.html)
 

@@ -1,5 +1,5 @@
 ---
-title: C++编程笔记
+title: C++ Primer
 date: 2016-08-18 19:06:36
 toc: true
 tags:

@@ -14,6 +14,9 @@ date: 2016-07-14 17:34:55
 
 <!--more-->
 
+### **我的程序**
+
+用Java写了一个ftp下载的工具, 见[ftpDownloader-Github](https://github.com/Simshang/ftpDownloader)
 
 ## 基本知识
 
@@ -104,11 +107,6 @@ javadoc -d [路径] -author -version
 ```
 
 - 在生成javadoc的时候，该类必须被public所修饰，并且该类中的方法只有被public所修饰才可以在方法摘要列表中。
-
-   
-### **我的程序**
-
-用Java写了一个ftp下载的工具, 见[ftpDownloader-Github](https://github.com/Simshang/ftpDownloader)
    
 ### **Java Error Solution**
 
