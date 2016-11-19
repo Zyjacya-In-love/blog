@@ -78,7 +78,7 @@ date: 2016-10-11 11:34:34
 
 5. 编写Writer将把一个结构化数据写入磁盘，以便其他人来读取, Writer 需要处理的结构化数据由 .proto 文件描述，经过上一节中的编译过程后，该数据化结构对应了一个C++的类，并定义在 caffe.pb.h 中, Writer 需要 include 该头文件，然后便可以使用这个类, 在 Writer 代码中，将要存入磁盘的结构化数据由一个 caffe 类的对象表示，它提供了一系列的` get/set `函数用来修改和读取结构化数据中的数据成员，或者叫` field`, 当我们需要将该结构化数据保存到磁盘上时，`caffe类 `已经提供相应的方法来把一个复杂的数据变成一个字节序列，我们可以将这个字节序列写入磁盘。
  
-### **caffe.pb.cc**
+**caffe.pb.cc**
 
 其实caffe.pb.cc里面的东西都是从caffe.proto编译而来的，无非就是一些关于这些数据结构（类）的标准化操作，比如
  
@@ -99,287 +99,307 @@ date: 2016-10-11 11:34:34
    void SetCachedSize() const;
  ```
  
- **BlobProto**
- ```
- message BlobProto {//blob的属性以及blob中的数据(data\diff)
-   optional int32 num = 1 [default = 0];
-   optional int32 channels = 2 [default = 0];
-   optional int32 height = 3 [default = 0];
-   optional int32 width = 4 [default = 0];
-   repeated float data = 5 [packed = true];
-   repeated float diff = 6 [packed = true];
- }
- ```
+我们用caffe.prototxt定义了网络的各个层, 层与层之间的数据流动是以Blobs的数据结构传递的, 下面我们从作为入口的数据层开始介绍
 
-**Datum**
- ```
-   message Datum {
-   optional int32 channels = 1;
-   optional int32 height = 2;
-   optional int32 width = 3;
-   optional bytes data = 4;//真实的图像数据，以字节存储(bytes)
-   optional int32 label = 5;
-   repeated float float_data = 6;//datum也能存float类型的数据(float)
- }
- ```
- 
- **LayerParameter**
- ```
- message LayerParameter {
-   repeated string bottom = 2; //输入的blob的名字(string)
-   repeated string top = 3; //输出的blob的名字(string)
-   optional string name = 4; //层的名字
-   enum LayerType { //层的枚举（enum，和c++中的enum一样）
-     NONE = 0;
-     ACCURACY = 1;
-     BNLL = 2;
-     CONCAT = 3;
-     CONVOLUTION = 4;
-     DATA = 5;
-     DROPOUT = 6;
-     EUCLIDEAN_LOSS = 7;
-     ELTWISE_PRODUCT = 25;
-     FLATTEN = 8;
-     HDF5_DATA = 9;
-     HDF5_OUTPUT = 10;
-     HINGE_LOSS = 28;
-     IM2COL = 11;
-     IMAGE_DATA = 12;
-     INFOGAIN_LOSS = 13;
-     INNER_PRODUCT = 14;
-     LRN = 15;
-     MEMORY_DATA = 29;
-     MULTINOMIAL_LOGISTIC_LOSS = 16;
-     POOLING = 17;
-     POWER = 26;
-     RELU = 18;
-     SIGMOID = 19;
-     SIGMOID_CROSS_ENTROPY_LOSS = 27;
-     SOFTMAX = 20;
-     SOFTMAX_LOSS = 21;
-     SPLIT = 22;
-     TANH = 23;
-     WINDOW_DATA = 24;
-   }
-   optional LayerType type = 5; // 层的类型
-   repeated BlobProto blobs = 6; //blobs的数值参数
-   repeated float blobs_lr = 7; //学习速率(repeated)，如果你想那个设置一个blob的学习速率，你需要设置所有blob的学习速率。
-   repeated float weight_decay = 8; //权值衰减(repeated)
- 
-   // 相对于某一特定层的参数(optional)
-   optional ConcatParameter concat_param = 9;
-   optional ConvolutionParameter convolution_param = 10;
-   optional DataParameter data_param = 11;
-   optional DropoutParameter dropout_param = 12;
-   optional HDF5DataParameter hdf5_data_param = 13;
-   optional HDF5OutputParameter hdf5_output_param = 14;
-   optional ImageDataParameter image_data_param = 15;
-   optional InfogainLossParameter infogain_loss_param = 16;
-   optional InnerProductParameter inner_product_param = 17;
-   optional LRNParameter lrn_param = 18;
-   optional MemoryDataParameter memory_data_param = 22;
-   optional PoolingParameter pooling_param = 19;
-   optional PowerParameter power_param = 21;
-   optional WindowDataParameter window_data_param = 20;
-   optional V0LayerParameter layer = 1;
- }
- ```
- **NetParameter**
- ```
- message NetParameter {
-   optional string name = 1;//网络的名字
-   repeated LayerParameter layers = 2; //repeated类似于数组
-   repeated string input = 3;//输入层blob的名字
-   repeated int32 input_dim = 4;//输入层blob的维度，应该等于(4*#input)
-   optional bool force_backward = 5 [default = false];//网络是否进行反向传播。如果设置为否，则由网络的结构和学习速率来决定是否进行反向传播。
- }
- ```
- **SolverParameter**
- ```
- message SolverParameter {
-   optional string train_net = 1; // 训练网络的proto file
-   optional string test_net = 2; // 测试网络的proto file
-   optional int32 test_iter = 3 [default = 0]; // 每次测试时的迭代次数
-   optional int32 test_interval = 4 [default = 0]; // 两次测试的间隔迭代次数
-   optional bool test_compute_loss = 19 [default = false];
-   optional float base_lr = 5; // 基本学习率
-   optional int32 display = 6; // 两次显示的间隔迭代次数
-   optional int32 max_iter = 7; // 最大迭代次数
-   optional string lr_policy = 8; // 学习速率衰减方式
-   optional float gamma = 9; // 关于梯度下降的一个参数
-   optional float power = 10; // 计算学习率的一个参数
-   optional float momentum = 11; // 动量
-   optional float weight_decay = 12; // 权值衰减
-   optional int32 stepsize = 13; // 学习速率的衰减步长
-   optional int32 snapshot = 14 [default = 0]; // snapshot的间隔
-   optional string snapshot_prefix = 15; // snapshot的前缀
-   optional bool snapshot_diff = 16 [default = false]; // 是否对于 diff 进行 snapshot
-   enum SolverMode {
-     CPU = 0;
-     GPU = 1;
-   }
-   optional SolverMode solver_mode = 17 [default = GPU]; // solver的模式，默认为GPU
-   optional int32 device_id = 18 [default = 0]; // GPU的ID
-   optional int64 random_seed = 20 [default = -1]; // 随机数种子
- }
- ```
+### **数据层**
 
-**DataParameter**
+数据层是每个模型的最底层，是模型的入口，不仅提供数据的输入，也提供数据从Blobs转换成别的格式进行保存输出。通常数据的预处理（如减去均值, 放大缩小, 裁剪和镜像等），也在这一层设置参数实现。
+
 
 ```
-message DataParameter {
-  enum DB {
-    LEVELDB = 0;
-    LMDB = 1;
+layer {
+  name: "cifar"    //自定义层名称
+  type: "Data"     //数据层: Data表示数据来源于LevelDB或LMDB
+  top: "data"      //bottom表示输入数据
+  top: "label"     //top表示输出数据, 如果有多个 top或多个bottom，表示有多个blobs数据的输入和输出
+  include {
+    phase: TRAIN   //训练和测试的时候模型使用的层是不一样的,需要用include来指定
   }
-  // Specify the data source.
-  optional string source = 1;
-  // Specify the batch size.
-  optional uint32 batch_size = 4;
-  // The rand_skip variable is for the data layer to skip a few data points
-  // to avoid all asynchronous sgd clients to start at the same point. The skip
-  // point would be set as rand_skip * rand(0,1). Note that rand_skip should not
-  // be larger than the number of keys in the database.
-  // DEPRECATED. Each solver accesses a different subset of the database.
-  optional uint32 rand_skip = 7 [default = 0];
-  optional DB backend = 8 [default = LEVELDB];
-  // DEPRECATED. See TransformationParameter. For data pre-processing, we can do
-  // simple scaling and subtracting the data mean, if provided. Note that the
-  // mean subtraction is always carried out before scaling.
-  optional float scale = 2 [default = 1];
-  optional string mean_file = 3;
-  // DEPRECATED. See TransformationParameter. Specify if we would like to randomly
-  // crop an image.
-  optional uint32 crop_size = 5 [default = 0];
-  // DEPRECATED. See TransformationParameter. Specify if we want to randomly mirror
-  // data.
-  optional bool mirror = 6 [default = false];
-  // Force the encoded image to have 3 color channels
-  optional bool force_encoded_color = 9 [default = false];
-  // Prefetch queue (Number of batches to prefetch to host memory, increase if
-  // data access bandwidth varies).
-  optional uint32 prefetch = 10 [default = 4];
+  #数据的预处理
+  transform_param {
+      scale: 0.00390625   //scale为0.00390625(1/255), 即将输入数据由0-255归一化到0-1之间
+      mean_file_size: "examples/cifar10/mean.binaryproto"  //用一个配置文件来进行均值操作
+      mirror: 1         // 1表示开启镜像，0表示关闭，也可用ture和false来表示
+      crop_size: 227   //剪裁一个 227*227的图块，在训练阶段随机剪裁，在测试阶段从中间裁剪
+    }
+  data_param {
+      ......
+  }
 }
 ```
 
-**LayerParameter**
+- `data 与 label: `在数据层中，至少有一个命名为data的top。如果有第二个top，一般命名为label。 这种(data,label)配对是分类模型所必需的。 
+
+**`data_param`部分根据数据的来源不同，来进行不同的设置**
+
+> [Caffe学习系列(2)：数据层及参数](http://www.cnblogs.com/denny402/p/5070928.html)
+
+### **视觉层**
+
+视觉层（Vision Layers)包括Convolution, Pooling, Local Response Normalization (LRN), im2col等层。
+
+- 卷积层(Convolution) : 卷积神经网络（CNN）的核心层
 
 ```
-// LayerParameter next available layer-specific ID: 147 (last added: recurrent_param)
-message LayerParameter {
-  optional string name = 1; // the layer name
-  optional string type = 2; // the layer type
-  repeated string bottom = 3; // the name of each bottom blob
-  repeated string top = 4; // the name of each top blob
-
-  // The train / test phase for computation.
-  optional Phase phase = 10;
-
-  // The amount of weight to assign each top blob in the objective.
-  // Each layer assigns a default value, usually of either 0 or 1,
-  // to each top blob.
-  repeated float loss_weight = 5;
-
-  // Specifies training parameters (multipliers on global learning constants,
-  // and the name and other settings used for weight sharing).
-  repeated ParamSpec param = 6;
-
-  // The blobs containing the numeric parameters of the layer.
-  repeated BlobProto blobs = 7;
-
-  // Specifies whether to backpropagate to each bottom. If unspecified,
-  // Caffe will automatically infer whether each input needs backpropagation
-  // to compute parameter gradients. If set to true for some inputs,
-  // backpropagation to those inputs is forced; if set false for some inputs,
-  // backpropagation to those inputs is skipped.
-  //
-  // The size must be either 0 or equal to the number of bottoms.
-  repeated bool propagate_down = 11;
-
-  // Rules controlling whether and when a layer is included in the network,
-  // based on the current NetState.  You may specify a non-zero number of rules
-  // to include OR exclude, but not both.  If no include or exclude rules are
-  // specified, the layer is always included.  If the current NetState meets
-  // ANY (i.e., one or more) of the specified rules, the layer is
-  // included/excluded.
-  repeated NetStateRule include = 8;
-  repeated NetStateRule exclude = 9;
-
-  // Parameters for data pre-processing.
-  optional TransformationParameter transform_param = 100;
-
-  // Parameters shared by loss layers.
-  optional LossParameter loss_param = 101;
-
-  // Layer type-specific parameters.
-  //
-  // Note: certain layers may have more than one computational engine
-  // for their implementation. These layers include an Engine type and
-  // engine parameter for selecting the implementation.
-  // The default for the engine is set by the ENGINE switch at compile-time.
-  optional AccuracyParameter accuracy_param = 102;
-  optional ArgMaxParameter argmax_param = 103;
-  optional BatchNormParameter batch_norm_param = 139;
-  optional BiasParameter bias_param = 141;
-  optional ConcatParameter concat_param = 104;
-  optional ContrastiveLossParameter contrastive_loss_param = 105;
-  optional ConvolutionParameter convolution_param = 106;
-  optional CropParameter crop_param = 144;
-  optional DataParameter data_param = 107;
-  optional DropoutParameter dropout_param = 108;
-  optional DummyDataParameter dummy_data_param = 109;
-  optional EltwiseParameter eltwise_param = 110;
-  optional ELUParameter elu_param = 140;
-  optional EmbedParameter embed_param = 137;
-  optional ExpParameter exp_param = 111;
-  optional FlattenParameter flatten_param = 135;
-  optional HDF5DataParameter hdf5_data_param = 112;
-  optional HDF5OutputParameter hdf5_output_param = 113;
-  optional HingeLossParameter hinge_loss_param = 114;
-  optional ImageDataParameter image_data_param = 115;
-  optional InfogainLossParameter infogain_loss_param = 116;
-  optional InnerProductParameter inner_product_param = 117;
-  optional InputParameter input_param = 143;
-  optional LogParameter log_param = 134;
-  optional LRNParameter lrn_param = 118;
-  optional MemoryDataParameter memory_data_param = 119;
-  optional MVNParameter mvn_param = 120;
-  optional ParameterParameter parameter_param = 145;
-  optional PoolingParameter pooling_param = 121;
-  optional PowerParameter power_param = 122;
-  optional PReLUParameter prelu_param = 131;
-  optional PythonParameter python_param = 130;
-  optional RecurrentParameter recurrent_param = 146;
-  optional ReductionParameter reduction_param = 136;
-  optional ReLUParameter relu_param = 123;
-  optional ReshapeParameter reshape_param = 133;
-  optional ScaleParameter scale_param = 142;
-  optional SigmoidParameter sigmoid_param = 124;
-  optional SoftmaxParameter softmax_param = 125;
-  optional SPPParameter spp_param = 132;
-  optional SliceParameter slice_param = 126;
-  optional TanHParameter tanh_param = 127;
-  optional ThresholdParameter threshold_param = 128;
-  optional TileParameter tile_param = 138;
-  optional WindowDataParameter window_data_param = 129;
+layer {
+  name: "conv1"           //自定义层名称
+  type: "Convolution"     //卷积层
+  bottom: "data"          //数据层作为输入
+  top: "conv1"            //输出层
+  param {
+    lr_mult: 1      //权值W的学习率的系数, 最终的学习率是`lr_mult`乘以solver.prototxt配置文件中的`base_lr`
+  }
+  param {
+    lr_mult: 2      //偏置项b学习率的系数,一般偏置项的学习率是权值学习率的两倍
+  }
+  #设置卷积层的特有参数
+  convolution_param {
+    num_output: 20    //卷积核(filter)的个数
+    kernel_size: 5    //卷积核的大小, 如果卷积核的长和宽不等，需要用kernel_h和kernel_w分别设定
+    stride: 1         //卷积核的步长，默认为1,也可以用stride_h和stride_w来设置上下和左右采用不同的步长
+    pad: 0            //对输入进行边缘扩充，默认为0, 也可以通过pad_h和pad_w来分别设置
+    bias_term: false  //是否开启偏置项，默认为true
+    group: 1          //默认为1组, 如果根据图像的通道来分组，那么第i个输出分组只能与第i个输入分组进行连接。
+    weight_filler {
+      type: "xavier"     //权值初始化, 默认为“constant",值全为0, 常用"xavier"，也可以设置为”gaussian"
+    }
+    bias_filler {
+      type: "constant"  //偏置项的初始化。一般设置为"constant",值全为0
+    }
+  }
 }
 ```
 
-**SoftmaxParameter**
+- 池化层(Pooling) : 为了减少运算量和数据维度而设置的一种层
 
 ```
-// Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
-message SoftmaxParameter {
-  enum Engine {
-    DEFAULT = 0;
-    CAFFE = 1;
-    CUDNN = 2;
+layer {
+  name: "pool1"         //自定义层名称
+  type: "Pooling"       //层类型：Pooling
+  bottom: "conv1"       //卷积层的输出作为该层的输入
+  top: "pool1"          //输出层
+  pooling_param {
+    pool: MAX           //池化方法，默认为MAX, 还有MAX,AVE,STOCHASTIC等
+    kernel_size: 3      //池化的核大小, 也可以用kernel_h和kernel_w分别设定
+    stride: 2           //池化的步长，默认为1, 一般设置为2，即不重叠, 也可以用stride_h和stride_w来设置
   }
-  optional Engine engine = 1 [default = DEFAULT];
+}
+```
 
-  // The axis along which to perform the softmax -- may be negative to index
-  // from the end (e.g., -1 for the last axis).
-  // Any other axes will be evaluated as independent softmaxes.
-  optional int32 axis = 2 [default = 1];
+- 局部区域归一化(LRN) : 对一个输入的局部区域进行归一化，达到“侧抑制”的效果, 参考AlexNet或GoogLenet
+
+```
+layers {
+  name: "norm1"     
+  type: LRN            //层类型：LRN
+  bottom: "pool1"
+  top: "norm1"
+  lrn_param {
+    local_size: 5      //如果是跨通道LRN，则表示求和的通道数；如果是在通道内LRN，则表示求和的正方形区域长度
+    alpha: 0.0001      //归一化公式中的参数
+    beta: 0.75         //归一化公式中的参数
+    norm_region: "ACROSS_CHANNELS" // ACROSS_CHANNELS表示在相邻的通道间求和归一化; WITHIN_CHANNEL表示在一个通道内部特定的区域内进行求和归一化, 与前面的local_size参数对应
+  }
+}
+```
+
+- 查看[LRN归一化公式](http://simtalk.cn/2016/09/20/Alexnet-in-Caffe/#LRN)
+
+- im2col层 
+
+该操作先将一个大矩阵，重叠地划分为多个子矩阵，对每个子矩阵序列化成向量，最后得到另外一个矩阵
+
+![](/img/caffeproto/im2col.png)
+
+在caffe中，卷积运算就是先对数据进行im2col操作，再进行内积运算（inner product)。这样做，比原始的卷积操作速度更快
+
+![](/img/caffeproto/conv.jpg)
+
+### **激活层**
+
+在激活层中，选用不同的激活函数对输入数据逐元素进行激活操作, 本质上是一种函数变换
+
+- **Sigmoid**
+
+```
+layer {
+  name: "encode1neuron"
+  bottom: "encode1"
+  top: "encode1neuron"
+  type: "Sigmoid"       //层类型：Sigmoid
+}
+```
+
+- **TanH**
+
+```
+layer {
+  name: "layer"
+  bottom: "in"
+  top: "out"
+  type: "TanH"   //层类型：TanH
+}
+```
+
+- **ReLU族**
+
+```
+layer {
+  name: "relu1"
+  type: "ReLU"     //层类型：ReLU
+  bottom: "pool1"
+  top: "pool1"
+}
+```
+
+- `negative_slope`：默认为0. 对标准的ReLU函数进行变化，如果设置了这个值，那么数据为负数时，就不再设置为0，而是用原始数据乘以negative_slope
+
+- Absolute Value : 求每个输入数据的绝对值
+
+```
+layer {
+  name: "layer"
+  bottom: "in"
+  top: "out"
+  type: "AbsVal"
+}
+```
+
+- **Power** : 对每个输入数据进行幂运算
+
+定义如下:
+
+$$f(x) = (shift + {scale} * {x})^{power} $$
+
+```
+layer {
+  name: "layer"
+  bottom: "in"
+  top: "out"
+  type: "Power"
+  power_param {
+    power: 2    
+    scale: 1
+    shift: 0
+  }
+}
+```
+
+- **BNLL**
+
+定义如下:
+
+$$ f(x) = log(1 + e^x) $$
+
+```
+layer {
+  name: "layer"
+  bottom: "in"
+  top: "out"
+  type: “BNLL”
+}
+```
+
+### **常用层**
+
+- **Softmax** : softmax是计算的是类别的概率（Likelihood），是Logistic Regression 的一种推广
+
+```
+layers {
+  name: "prob"   
+  bottom: "cls3_fc" //输入特征值
+  top: "prob"      //输出概率大小
+  type: “Softmax"
+}
+```
+
+- **Softmax-Loss** : 
+
+```
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip1"     //输入模型预测值
+  bottom: "label"   //输入真实值
+  top: "loss"       //输出损失值
+}
+```
+
+- 不管是softmax layer还是softmax-loss layer,都是没有参数的，只是层类型不同
+
+- **Inner Product** : 
+
+```
+layer {
+  name: "ip1"
+  type: "InnerProduct"      //层类型：InnerProduct
+  bottom: "pool2"
+  top: "ip1"
+  param {
+    lr_mult: 1              //权值W的学习率系数
+  }
+  param {
+    lr_mult: 2              //偏置项b的学习率系数
+  }
+  inner_product_param {
+    num_output: 500        //滤波器（filter)的个数
+    weight_filler {
+      type: "xavier"       //权值初始化
+    }
+    bias_filler {
+      type: "constant"     //偏置项的初始化
+    }
+  }
+}
+```
+
+- 全连接层实际上也是一种卷积层，只是它的卷积核大小和原数据大小一致, 因此它的参数基本和卷积层的参数一样。
+
+- **accuracy** : 输出预测精确度，只有test阶段才有，需要加入include参数 
+
+```
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "ip2"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
+```
+
+- **reshape** : 在不改变数据的情况下，改变输入的维度
+
+```
+layer {
+    name: "reshape"
+    type: "Reshape"     //层类型：Reshape
+    bottom: "input"
+    top: "output"
+    # 可选的参数组shape, 用于指定blob数据的各维的值（blob是一个四维的数据：n*c*w*h）
+    reshape_param {
+      shape {
+        dim: 0  //表示维度不变，即输入和输出是相同的维度
+        dim: 2  //将原来的维度变成2
+        dim: 3  //将原来的维度变成3
+        dim: -1 //表示由系统自动计算维度, 数据的总量不变，系统会根据blob数据的其它三维来自动计算当前维的维度值
+      }
+    }
+  }
+```
+
+- **Dropout** : 以某种概率随机地让网络某些隐含层节点的权重失活
+
+```
+layer {
+  name: "drop7"
+  type: "Dropout"
+  bottom: "fc7-conv"
+  top: "fc7-conv"
+  dropout_param {
+    dropout_ratio: 0.5   //随机失活概率
+  }
 }
 ```

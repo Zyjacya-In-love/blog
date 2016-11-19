@@ -5,7 +5,7 @@ tags:
   - pycaffe
 categories:
   - Caffe
-date: 2016-10-18 14:53:12
+date: 2016-10-28 14:53:12
 ---
 
 在 [Caffe in Action](http://simtalk.cn/2016/09/14/Caffe-in-Action/#pycaffe)中我们已经介绍了如何编译pycaffe, 使用python来调用caffe的接口实现模型的定义和训练是十分方便的, 在权值和网络可视化方面也十分友好, 下面来学习一下pycaffe的使用
@@ -308,7 +308,7 @@ if __name__ == '__main__':
 
 到此为止, 我们已经训练好了一个mnist的caffemodel的模型, 并且生成了deploy.prototxt文件, 现在我们就利用这两个文件来对一个新的图片进行分类预测。
 
-```
+```python
 #coding=utf-8
 
 import caffe
