@@ -2,7 +2,7 @@
 title: PyCaffe in Practice
 toc: true
 tags:
-  - pycaffe
+  - PyCaffe
 categories:
   - Caffe
 date: 2016-10-28 14:53:12
@@ -346,6 +346,30 @@ print 'the class is:',labels[order]   #将该序号转换成对应的类别名�
 the class is: 5
 ```
 
+### **网络可视化**
+
+$ `python draw_net.py ../models/bvlc_reference_caffenet/train_val.prototxt caffenet.png`
+
+Drawing net to caffenet.png
+
+draw_net.py执行的时候带三个参数:
+
+- 第一个参数：网络模型的prototxt文件
+
+- 第二个参数：保存的图片路径及名字
+
+- 第三个参数：`--rankdir=x` , x 有四种选项，分别是LR, RL, TB, BT 。用来表示网络的方向，分别是从左到右，从右到左，从上到下，从下到上。默认为LR
+
+- 如下图所示:
+
+![](\img\PyCaffe-in-Practice\caffenet.png)
+
+- 需要的库
+
+`pip install pydot==1.1.0`
+
+`apt-get install graphviz`
+
 ### **loss可视化**
 
 将训练过程中的loss和acc画出来
@@ -497,21 +521,253 @@ fea=net.blobs['InnerProduct1'].data
 print fea
 ```
 
-### **网络可视化**
+### **模型可视化**
 
-$ `python draw_net.py ../models/bvlc_reference_caffenet/train_val.prototxt caffenet.png`
+在训练过程中可以把训练好的模型保存起来，如lenet_iter_10000.caffemodel, 训练多少次就自动保存一下，这个是通过snapshot进行设置的，保存文件的路径及文件名前缀是由snapshot_prefix来设定的。这个文件里面存放的就是各层的参数，即net.params，里面没有数据(net.blobs)。还生成了一个相应的solverstate文件，这个和caffemodel差不多，但它多了一些数据，如模型名称、当前迭代次数等。两者的功能不一样，训练完后保存起来的caffemodel，是在测试阶段用来分类的，而solverstate是用来恢复训练的，防止意外终止而保存的快照, 相当于一个实时备份
 
-Drawing net to caffenet.png
+- 我们使用`Cifar10`作为例子:
 
-- 如下图所示:
+```python
+# -*- coding: utf-8 -*-
 
-![](\img\PyCaffe-in-Practice\caffenet.png)
+import numpy as np
+import os,sys,caffe
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import savefig
 
-- 需要的库
+### 将相应的prototxt和caffemodel文件从服务器复制出来放在目录下
+caffe_root='./'
+os.chdir(caffe_root)
+sys.path.insert(0,caffe_root+'python')
 
-`pip install pydot==1.1.0`
+plt.rcParams['figure.figsize'] = (8, 8)
+plt.rcParams['image.interpolation'] = 'nearest'
+plt.rcParams['image.cmap'] = 'gray'
 
-`apt-get install graphviz`
+net = caffe.Net(caffe_root + 'cifar10_quick.prototxt',
+                caffe_root + 'cifar10_quick_iter_5000.caffemodel',
+                caffe.TEST)
+[(k, v[0].data.shape) for k, v in net.params.items()]
+
+# 编写一个函数，用于显示各层的参数
+def show_feature(data, padsize=1, padval=0):
+    data -= data.min()
+    data /= data.max()
+
+    # force the number of filters to be square
+    n = int(np.ceil(np.sqrt(data.shape[0])))
+    padding = ((0, n ** 2 - data.shape[0]), (0, padsize), (0, padsize)) + ((0, 0),) * (data.ndim - 3)
+    data = np.pad(data, padding, mode='constant', constant_values=(padval, padval))
+
+    # tile the filters into an image
+    data = data.reshape((n, n) + data.shape[1:]).transpose((0, 2, 1, 3) + tuple(range(4, data.ndim + 1)))
+    data = data.reshape((n * data.shape[1], n * data.shape[3]) + data.shape[4:])
+    plt.imshow(data) # 设断点
+    plt.axis('off')
+
+# 第一个卷积层，参数规模为(32,3,5,5)，即32个5*5的3通道filter
+weight = net.params["conv1"][0].data
+# 参数有两种类型：权值参数和偏置项,分别用params["conv1"][0] 和params["conv1"][1] 表示
+print weight.shape
+show_feature(weight.transpose(0, 2, 3, 1))
+
+# 第二个卷积层的权值参数，共有32*32个filter,每个filter大小为5*5
+weight = net.params["conv2"][0].data
+print weight.shape
+show_feature(weight.reshape(32*32, 5, 5))
+
+# 第三个卷积层的权值，共有64*32个filter,每个filter大小为5*5，取其前1024个进行可视化
+weight = net.params["conv3"][0].data
+print weight.shape
+show_feature(weight.reshape(64*32,5,5))
+
+```
+
+**实验结果:**
+
+第一个卷积层:
+
+![](/img/PyCaffe-in-Practice/visuconv1.png)
+第二个卷积层:
+
+![](/img/PyCaffe-in-Practice/visuconv2.png)
+第三个卷积层:
+
+![](/img/PyCaffe-in-Practice/visuconv3.png)
+
+### **数据可视化**
+
+在测试过程当中, 进行数据的可视化, 前提是得到caffemodel, 和一张测试图片, 我们在cifar10的dog类中选一张图片进行测试, 首先加载模型和测试图片代码如下:
+
+```python
+# -*- coding: utf-8 -*-
+import numpy as np
+import matplotlib.pyplot as plt
+import sys,os,caffe
+caffe_root = './'
+sys.path.insert(0, caffe_root + 'python')
+os.chdir(caffe_root)
+if not os.path.isfile(caffe_root + 'cifar10_quick_iter_4000.caffemodel'):
+    print "caffemodel is not exist..."
+else:
+    print "Ready to Go ..."
+
+caffe.set_mode_gpu()
+
+net = caffe.Net(caffe_root + 'cifar10_quick.prototxt',
+                caffe_root + 'cifar10_quick_iter_4000.caffemodel',
+                caffe.TEST)
+print str(net.blobs['data'].data.shape)
+#加载测试图片，并显示
+img = caffe.io.load_image('./dog4.png')
+print img.shape
+plt.imshow(img)
+plt.axis('off')
+print img.shape
+```
+
+- 运行结果:
+
+![](/img/PyCaffe-in-Practice/dog.png)
+
+然后编写一个函数，将二进制的均值转换为python的均值:
+
+```python
+def convert_mean(binMean,npyMean):
+    blob = caffe.proto.caffe_pb2.BlobProto()
+    bin_mean = open(binMean, 'rb' ).read()
+    blob.ParseFromString(bin_mean)
+    arr = np.array( caffe.io.blobproto_to_array(blob) )
+    npy_mean = arr[0]
+    np.save(npyMean, npy_mean )
+binMean=caffe_root+'examples/cifar10/mean.binaryproto'
+npyMean=caffe_root+'examples/cifar10/mean.npy'
+convert_mean(binMean,npyMean)
+
+#将图片载入blob中,并减去均值
+transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
+transformer.set_transpose('data', (2,0,1))
+transformer.set_mean('data', np.load(npyMean).mean(1).mean(1)) # 减去均值
+transformer.set_raw_scale('data', 255)
+transformer.set_channel_swap('data', (2,1,0))
+net.blobs['data'].data[...] = transformer.preprocess('data',img)
+inputData=net.blobs['data'].data
+#显示减去均值前后的数据
+plt.figure()
+plt.subplot(1,2,1),plt.title("origin")
+plt.imshow(img)
+plt.axis('off')
+plt.subplot(1,2,2),plt.title("subtract mean")
+plt.imshow(transformer.deprocess('data', inputData[0]))
+plt.axis('off')
+
+print 'subtract mean finished.'
+```
+
+- mean.binaryproto是由caffe本身自带的工具计算得来的, 上面的代码生成了`mean.npy`文件, 将测试图片进行预处理, 减去均值:
+
+![](/img/PyCaffe-in-Practice/mean.png)
+
+显示网络中每层的数据信息和参数信息
+
+```python
+#运行测试模型
+net.forward()
+#显示各层数据信息
+print 'Show data parameter:'
+data_shapes = [(k, v.data.shape) for k, v in net.blobs.items()]
+for data_shape in data_shapes:
+    print data_shape
+# 显示各层数据信息
+print 'Show net parameter:'
+nets_shape = [(k, v[0].data.shape) for k, v in net.params.items()]
+for net_shape in nets_shape:
+    print net_shape
+```
+
+下面编写一个函数，用于显示各层数据和参数, 并显示最后的分类概率:
+
+```python
+# 编写一个函数，用于显示各层数据
+def show_data(data, padsize=1, padval=0):
+    data -= data.min()
+    data /= data.max()
+
+    # force the number of filters to be square
+    n = int(np.ceil(np.sqrt(data.shape[0])))
+    padding = ((0, n ** 2 - data.shape[0]), (0, padsize), (0, padsize)) + ((0, 0),) * (data.ndim - 3)
+    data = np.pad(data, padding, mode='constant', constant_values=(padval, padval))
+
+    # tile the filters into an image
+    data = data.reshape((n, n) + data.shape[1:]).transpose((0, 2, 1, 3) + tuple(range(4, data.ndim + 1)))
+    data = data.reshape((n * data.shape[1], n * data.shape[3]) + data.shape[4:])
+    plt.figure()   # 设断点, 保存图片
+    plt.imshow(data, cmap='gray')
+    plt.axis('off')
+    print '-----Show finished.------'
+
+
+plt.rcParams['figure.figsize'] = (8, 8)
+plt.rcParams['image.interpolation'] = 'nearest'
+plt.rcParams['image.cmap'] = 'gray'
+
+#显示第一个卷积层的输出数据和权值（filter）
+show_data(net.blobs['conv1'].data[0])
+print net.blobs['conv1'].data.shape
+show_data(net.params['conv1'][0].data.reshape(32*3,5,5))
+print net.params['conv1'][0].data.shape
+
+#显示第一次pooling后的输出数据
+show_data(net.blobs['pool1'].data[0])
+print net.blobs['pool1'].data.shape
+
+#显示第二次卷积后的输出数据以及相应的权值（filter）
+show_data(net.blobs['conv2'].data[0],padval=0.5)
+print net.blobs['conv2'].data.shape
+show_data(net.params['conv2'][0].data.reshape(32**2,5,5))
+print net.params['conv2'][0].data.shape
+
+#显示第三次卷积后的输出数据以及相应的权值（filter）,取前１024个进行显示
+show_data(net.blobs['conv3'].data[0],padval=0.5)
+print net.blobs['conv3'].data.shape
+show_data(net.params['conv3'][0].data.reshape(64*32,5,5)[:1024])
+print net.params['conv3'][0].data.shape
+
+#显示第三次池化后的输出数据
+show_data(net.blobs['pool3'].data[0],padval=0.2)
+print net.blobs['pool3'].data.shape
+
+# 最后一层输入属于某个类的概率
+feat = net.blobs['prob'].data[0]
+print feat # 设断点
+plt.figure()
+plt.plot(feat.flat)
+print 'Test finish.'
+```
+
+![](/img/PyCaffe-in-Practice/result1.png)
+![](/img/PyCaffe-in-Practice/result2.png)
+![](/img/PyCaffe-in-Practice/result3.png)
+
+**最终的分类结果:**
+
+```
+[  2.96744809e-04   1.60467534e-05   3.39228063e-05   3.95220798e-03
+   8.45546026e-07   9.95582640e-01   1.68944953e-05   6.99048323e-05
+   4.91492074e-07   3.02444241e-05   ]
+```
+
+![](/img/PyCaffe-in-Practice/result.png)
+
+从输入的结果和图示来看，最大的概率是9.95582640e-01，属于第５类（标号从０开始）。
+与cifar10中的10种类型名称进行对比：
+
+airplane[0]、automobile[1]、bird[2]、cat[3]、deer[4]、dog[5]、frog[6]、horse[7]、ship[8]、truck[9]
+
+根据测试结果判断为dog
+
 
 > 以上代码全部经过测试, 特别感谢: [denny的学习专栏](http://www.cnblogs.com/denny402/category/759199.html)
 

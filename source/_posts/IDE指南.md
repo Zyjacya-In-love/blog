@@ -59,6 +59,11 @@ categories:
 
 4. 最后在项目的`out/artifacts/`目录找输出的jar包
 
+**关闭代码重复提醒**
+
+1. 打开 `Settings `-> `Editor` -> `Inspections`
+2. 右边搜索`Duplicates Code`把钩去掉OK
+
 ### **VS2013**
 
 > **链接库**
