@@ -1,5 +1,5 @@
 ---
-title: Hexo入门
+title: Hello Hexo 
 toc: true
 tags:
   - Hexo
@@ -7,7 +7,6 @@ categories:
   - DevTools 
 date: 2015-2-07 15:28:52
 ---
-
 
 这是一篇Hexo的简单使用教程，使用前提是安装hexo并部署到GitPage，并且采用git方式部署文章。
 
@@ -51,10 +50,18 @@ deploy:
 
 最后使用`hexo d`进行部署
 
-## 清除生成的文件
+## 清除生成文件
 
 `hexo clean`
 
 ** 如果在部署GitPage过程中有`CNAME`文件，记得放进`Public`文件夹**
 
 > `CNAME`文件是将自己域名和GitPage关联的文件
+
+### **重置GitPage**
+
+1. 在GitHub重建`github.io仓库`
+
+2. 在`hexo init`的文件夹下删除`.deploy_git`文件夹
+
+3. 在终端`hexo d -g`, 重新将生成的文件进行部署
