@@ -4,6 +4,7 @@ date: 2016-09-08 09:32:07
 toc: true
 tags:
   - 神经网络
+  - 激活函数
 categories:
   - cs231n
 ---

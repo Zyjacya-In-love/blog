@@ -3,7 +3,8 @@ title: Neural Network in Practice
 date: 2016-09-09 09:22:54
 toc: true
 tags:
-  - 神经网络
+  - BN
+  - Dropout
 categories:
   - cs231n
 ---
@@ -159,6 +160,8 @@ categories:
 - 由于BN操作也就是标准化是一个简单可求导的操作, 所以对于整个网络依然可以利用梯度下降法进行迭代优化
 
 **注意**, 在训练时候我们使用的均值和方差并不是基于选定的那批数据, 而是调整过的具有经验的单一均值, 比如在训练期间模型估计的均值
+
+> [Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift](https://arxiv.org/pdf/1502.03167.pdf)
 
 ### **正则化**
 

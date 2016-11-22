@@ -1,11 +1,11 @@
 ---
-title: Alexnet in Caffe
+title: AlexNet 
 date: 2016-09-20 21:46:35
 toc: true
 tags:
-  - Alexnet
+  - AlexNet
 categories:
-  - Caffe
+  - 深度学习
 ---
 关于Alexnet的介绍, 我们在 [CNNs](http://simtalk.cn/2016/09/12/CNNs/#拓展阅读)的扩展阅读里简单的讲过了, 下面我们要用Caffe真正的实践一下Alexnet, 并且关于网络中的一些知识点进行讲解
 <!--more-->
