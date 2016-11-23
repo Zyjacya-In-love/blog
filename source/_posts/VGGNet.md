@@ -26,6 +26,10 @@ VGG和GoogLenet这两个模型结构有一个共同特点是`Go deeper`。跟Goo
 
 ![](\img\VGGNet\VGG.jpg)
 
+**对D网络结构的参数分析:**
+
+![](\img\VGGNet\VGGp.jpg)
+
 **结构特点:**
 
 1. 小的Filter尺寸为$3\*3$

@@ -330,7 +330,7 @@ y_pred[i] = c.most_common(1)[0][0]
 
 
 
-### **交叉验证的TODO** 在`knn.py`文件中
+**交叉验证的TODO** 在`knn.py`文件中
 
 > 数据分组
 
