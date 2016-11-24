@@ -3,11 +3,14 @@ title: Fully Convolutional Networks
 toc: true
 tags:
   - FCN
-  - Caffe
 categories:
   - 深度学习
 date: 2016-11-1 11:38:52
 ---
+
+<!--more-->
+
+
 
 [FCN模型结构](http://ethereon.github.io/netscope/#/gist/126e8d978afb58392024a3847da6e37b)
 
