@@ -110,7 +110,10 @@ categories:
 `sudo docker run --privileged=true  -i -t -d -P --name caffe_gpu_shangyan -v /home/shang:/home/ caffe_gpu:shangyan`
 
   - 创建GPU版本的Caffe容器, 将主机的`/home/shang`挂载到容器的`/home/`下面
+  
+`sudo docker run --privileged=true --net=host -i -t -d -P --name caffe_gpu_shangyan -v /home/shang:/home/ caffe_gpu:shangyan`
 
+  - 网络host模式，使用` --net=host `指定, 但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。
    
 `cd /root/caffe`
 
