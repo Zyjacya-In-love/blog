@@ -12,6 +12,10 @@ categories:
 
 ### **IDEA**
 
+> Shift +
+
+- `Shift + F6` 批量修改变量名称
+
 > Ctrl + 
 
 - `Ctrl + H` 打开类视图
