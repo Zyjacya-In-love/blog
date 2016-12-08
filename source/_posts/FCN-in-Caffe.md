@@ -383,8 +383,7 @@ test_initialization: false
 
 ### **相关资料**
 
-[OCR论文集](https://handong1587.github.io/deep_learning/2015/10/09/ocr.html)
+1. [OCR论文集](https://handong1587.github.io/deep_learning/2015/10/09/ocr.html)
 
-
-[Synthetic Data for Text Localisation in Natural Images](http://www.robots.ox.ac.uk/~vgg/publications/2016/Gupta16/)
+2. [Synthetic Data for Text Localisation in Natural Images](http://www.robots.ox.ac.uk/~vgg/publications/2016/Gupta16/)
 
