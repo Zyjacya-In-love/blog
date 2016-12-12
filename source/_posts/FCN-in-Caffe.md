@@ -377,7 +377,7 @@ test_initialization: false
 
 **如何更改FCN的batch size?**
 
-- 最简单的方式是更改`iter_size, 在文中$iter_size=1$
+- 最简单的方式是更改`iter_{size}, 在文中$iter_size=1$
 
 `test_iter: 1000` : 由于我们的batchsize=1, 测试样本数为1000, 需要迭代1000次才能完成
 

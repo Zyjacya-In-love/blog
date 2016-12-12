@@ -24,6 +24,107 @@ $$L(W) \approx \frac{1}{N} \sum\_i^N f\_W\left(X^{(i)}\right) + \lambda r(W)$$
 
 前向传播求解$f_W$(即loss), 后向传播求解梯度$\nabla f_W$, 根据误差梯度$\nabla f_W$和正则项梯度$\nabla r(W)$以及其他参数进行参数更新$\Delta W$
 
+### **Caffe Output**
+
+**.caffemodel** : 以一定的迭代间隔保存网络参数, 相当于保存网络的状态
+
+  - The caffemodel, which is output at a specified interval while training, is a binary contains the current state of the weights for each layer of the network.
+
+**.solverstate** : 在整个训练过程中保存训练的状态以备从某个状态继续训练模型, 有点断点续传的意思
+
+  - The solverstate, which is generated alongside, is a binary contains the information required to continue training the model from where it last stopped.
+
+### **Solver Prototxt**
+
+**Parameters**
+
+1. `base_lr`
+
+  This parameter indicates the base (beginning) learning rate of the network. The value is a real number (floating point).
+
+2. `lr_policy`
+
+  This parameter indicates how the learning rate should change over time. This value is a quoted string.
+
+   Options include:
+
+  - "step" - drop the learning rate in step sizes indicated by the gamma parameter.
+  - "multistep" - drop the learning rate in step size indicated by the gamma at each specified stepvalue.
+  - "fixed" - the learning rate does not change.
+  - "exp" - gamma^iteration
+  - "poly" -
+  - "sigmoid" -
+
+3. `gamma`
+
+  This parameter indicates how much the learning rate should change every time we reach the next "step." The value is a real number, and can be thought of as multiplying the current learning rate by said number to gain a new learning rate.
+
+4. `stepsize`
+
+  This parameter indicates how often (at some iteration count) that we should move onto the next "step" of training. This value is a positive integer.
+
+5. `stepvalue`
+
+  This parameter indicates one of potentially many iteration counts that we should move onto the next "step" of training. This value is a positive integer. There are often more than one of these parameters present, each one indicated the next step iteration.
+
+6. `max_iter`
+
+  This parameter indicates when the network should stop training. The value is an integer indicate which iteration should be the last.
+
+7. `momentum`
+
+  This parameter indicates how much of the previous weight will be retained in the new calculation. This value is a real fraction.
+
+8. `weight_decay`
+
+  This parameter indicates the factor of (regularization) penalization of large weights. This value is a often a real fraction.
+
+9. `solver_mode`
+
+  This parameter indicates which mode will be used in solving the network.
+
+  Options include:
+
+  - CPU
+  - GPU
+
+10. `snapshot`
+
+  This parameter indicates how often caffe should output a model and solverstate. This value is a positive integer.
+
+11. `snapshot_prefix:`
+
+  This parameter indicates how a snapshot output's model and solverstate's name should be prefixed. This value is a double quoted string.
+
+12. `net:`
+
+  This parameter indicates the location of the network to be trained (path to prototxt). This value is a double quoted string.
+
+13. `test_iter`
+
+  This parameter indicates how many test iterations should occur per test_interval. This value is a positive integer.
+
+14. `test_interval`
+
+  This parameter indicates how often the test phase of the network will be executed.
+
+15. `display`
+
+  This parameter indicates how often caffe should output results to the screen. This value is a positive integer and specifies an iteration count.
+
+16. `type`
+
+  This parameter indicates the back propagation algorithm used to train the network. This value is a quoted string.
+
+  Options include:
+
+  - Stochastic Gradient Descent "SGD"
+  - AdaDelta "AdaDelta"
+  - Adaptive Gradient "AdaGrad"
+  - Adam "Adam"
+  - Nesterov’s Accelerated Gradient "Nesterov"
+  - RMSprop "RMSProp"
+
 ### **SGD**
 
 随机梯度下降（Stochastic gradient descent:`type: "SGD"`）是在梯度下降法（gradient descent）的基础上发展起来的, 利用负梯度$\nabla L(W)$和上一次的权重更新值$V_t$的线性组合来更新权重$W$
