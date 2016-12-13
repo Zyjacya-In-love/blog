@@ -8,19 +8,19 @@ categories:
 date: 2016-11-25 10:18:36
 ---
 
-在学习了FCN之后特别地兴奋, 也许这就是网络结构的创意带来的思路上的刺激感吧, 于是开始跑一个FCN试试, 选来选去还是觉得 [Siftflow-fcn8s](https://github.com/shelhamer/fcn.berkeleyvision.org) 比较靠谱, 一个是数据量适当, 另一个是训练任务比较适合现在正在做的事情, 于是训练了一下官方demo
+在学习了FCN之后特别地兴奋, 也许这就是网络结构的创意带来的思路上的刺激感吧, 于是开始跑一个FCN试试, 选来选去还是觉得 [Siftflow-fcn8s](https://github.com/shelhamer/fcn.berkeleyvision.org) 比较靠谱, 一个是数据量适当, 另一个是训练任务比较适合现在正在做的事情, 于是训练了一下官方demo, 之后又训练了Pascal-context的任务
 
 <!--more-->
 
 > 理论部分参考我的另一篇文章: [Fully Convolutional Networks](http://simtalk.cn/2016/11/01/Fully-Convolutional-Networks/)
 
-### **网络基本结构**
+## **siftflow-fcn8s**
 
-用caffe自带的工具将siftflow-fcn8s的网路结构画出来, 由下图可知, 该网络完成了两个任务的训练
+### **网络结构**
+
+- 在 [sift-flow数据集](https://github.com/shelhamer/fcn.berkeleyvision.org/blob/master/data/sift-flow/README.md)上有两个任务，一个是语义分割(33类+背景类)；另一个是几何分割(3类+背景类), 用caffe自带的工具将siftflow-fcn8s的网路结构画出来, 由下图可知, 该网络完成了两个任务的训练
 
 ![](/img/FCN-in-Caffe/siftflow-fcn8s.png)
- 
-- 在 [sift-flow数据集](https://github.com/shelhamer/fcn.berkeleyvision.org/blob/master/data/sift-flow/README.md)上有两个任务，一个是语义分割(33类+背景类)；另一个是几何分割(3类+背景类)
 
 ### **训练步骤**
 
@@ -46,11 +46,11 @@ date: 2016-11-25 10:18:36
 
 - 和论文结果相差零点几个百分点, demo训练成功, 下面我们要基于该网络做
 
-### **数据制作**
+### **Python Layer**
+
+**数据制作问题:**
 
 caffe的label必须是从自然数N连续的开始的。0，1，2，...，N，这就表示了具有N+1个类别的标签label。
-
-### **Python Layer**
 
 Caffe通过Boost中的`Boost.Python`模块来支持使用Python定义Layer
 
@@ -375,13 +375,309 @@ weight_decay: 0.0005
 test_initialization: false
 ```
 
+
 **如何更改FCN的batch size?**
 
-- 最简单的方式是更改`iter_{size}, 在文中$iter_size=1$
+- 最简单的方式是更改`iter_size`参数, 在文中`iter_size: 1`$, 也就是说每次迭代输入一个样本, 即batch_size=1
 
 `test_iter: 1000` : 由于我们的batchsize=1, 测试样本数为1000, 需要迭代1000次才能完成
 
-### **相关资料**
+## **Pascal-Context**
+
+> 数据的准备和设置就不多说了在Github的README上都有, 主要有三个方面:
+
+1. JPEG原始图片
+2. mat文件的label
+3. 下载caffemodel
+
+然后在相应的python文件中设置路径就可以了
+
+### **网络结构**
+
+通过更改net.py生成了111类(包括背景类)的分类模型, 运行`net.py`可以生成`train.prototxt`和`val.prototxt`, 网络结构如下:
+
+![](/img/FCN-in-Caffe/pascal-fcn8s.png)
+
+### **Python Layer**
+
+Pascal-Context的Python Layer定义如下:
+
+```python
+import caffe
+import numpy as np
+from PIL import Image
+import scipy.io
+import random
+
+class PASCALContextSegDataLayer(caffe.Layer):
+    """
+    Load (input image, label image) pairs from PASCAL-Context
+    one-at-a-time while reshaping the net to preserve dimensions.
+    The labels follow the 59 class task defined by
+        R. Mottaghi, X. Chen, X. Liu, N.-G. Cho, S.-W. Lee, S. Fidler, R.
+        Urtasun, and A. Yuille.  The Role of Context for Object Detection and
+        Semantic Segmentation in the Wild.  CVPR 2014.
+    Use this to feed data to a fully convolutional network.
+    """
+
+    def setup(self, bottom, top):
+        """
+        Setup data layer according to parameters:
+        - voc_dir: path to PASCAL VOC dir (must contain 2010)
+        - context_dir: path to PASCAL-Context annotations
+        - split: train / val / test
+        - randomize: load in random order (default: True)
+        - seed: seed for randomization (default: None / current time)
+        for PASCAL-Context semantic segmentation.
+        example: params = dict(voc_dir="/path/to/PASCAL", split="val")
+        """
+        # config
+        params = eval(self.param_str)
+        self.voc_dir = params['voc_dir'] + '/VOC2010'
+        self.context_dir = params['context_dir']
+        self.split = params['split']
+        self.mean = np.array((104.007, 116.669, 122.679), dtype=np.float32)
+        self.random = params.get('randomize', True)
+        self.seed = params.get('seed', None)
+
+        # load labels and resolve inconsistencies by mapping to full 400 labels
+        self.labels_400 = [label.replace(' ','') for idx, label in np.genfromtxt(self.context_dir + '/labels.txt', delimiter=':', dtype=None)]
+        self.labels_59 = [label.replace(' ','') for idx, label in np.genfromtxt(self.context_dir + '/59_labels.txt', delimiter=':', dtype=None)]
+        for main_label, task_label in zip(('table', 'bedclothes', 'cloth'), ('diningtable', 'bedcloth', 'clothes')):
+            self.labels_59[self.labels_59.index(task_label)] = main_label
+
+        # two tops: data and label
+        if len(top) != 2:
+            raise Exception("Need to define two tops: data and label.")
+        # data layers have no bottoms
+        if len(bottom) != 0:
+            raise Exception("Do not define a bottom.")
+
+        # load indices for images and labels
+        split_f  = '{}/ImageSets/Main/{}.txt'.format(self.voc_dir,
+                self.split)
+        self.indices = open(split_f, 'r').read().splitlines()
+        self.idx = 0
+
+        # make eval deterministic
+        if 'train' not in self.split:
+            self.random = False
+
+        # randomization: seed and pick
+        if self.random:
+            random.seed(self.seed)
+            self.idx = random.randint(0, len(self.indices)-1)
+
+    def reshape(self, bottom, top):
+        # load image + label image pair
+        self.data = self.load_image(self.indices[self.idx])
+        self.label = self.load_label(self.indices[self.idx])
+        # reshape tops to fit (leading 1 is for batch dimension)
+        top[0].reshape(1, *self.data.shape)
+        top[1].reshape(1, *self.label.shape)
+
+    def forward(self, bottom, top):
+        # assign output
+        top[0].data[...] = self.data
+        top[1].data[...] = self.label
+
+        # pick next input
+        if self.random:
+            self.idx = random.randint(0, len(self.indices)-1)
+        else:
+            self.idx += 1
+            if self.idx == len(self.indices):
+                self.idx = 0
+
+    def backward(self, top, propagate_down, bottom):
+        pass
+
+    def load_image(self, idx):
+        """
+        Load input image and preprocess for Caffe:
+        - cast to float
+        - switch channels RGB -> BGR
+        - subtract mean
+        - transpose to channel x height x width order
+        """
+        im = Image.open('{}/JPEGImages/{}.jpg'.format(self.voc_dir, idx))
+        in_ = np.array(im, dtype=np.float32)
+        in_ = in_[:,:,::-1]
+        in_ -= self.mean
+        in_ = in_.transpose((2,0,1))
+        return in_
+
+    def load_label(self, idx):
+        """
+        Load label image as 1 x height x width integer array of label indices.
+        The leading singleton dimension is required by the loss.
+        The full 400 labels are translated to the 59 class task labels.
+        """
+        label_400 = scipy.io.loadmat('{}/trainval/{}.mat'.format(self.context_dir, idx))['LabelMap']
+        label = np.zeros_like(label_400, dtype=np.uint8)
+        for idx, l in enumerate(self.labels_59):
+            idx_400 = self.labels_400.index(l) + 1
+            label[label_400 == idx_400] = idx + 1
+        label = label[np.newaxis, ...]
+        return label
+```
+
+值得注意的是在Python Layer中对于label的处理方式, 我们将源代码中的对于label的处理程序抽取出来:
+
+```python
+import numpy as np
+import scipy.io
+
+params = {
+    'voc_dir': './data/pascal',
+    'context_dir': './data/pascal-context',
+    'split': 'train',
+    'seed': 1337
+}
+
+voc_dir = params['voc_dir'] + '/VOC2010'
+context_dir = params['context_dir']
+split = params['split']
+mean = np.array((104.007, 116.669, 122.679), dtype=np.float32)
+random = params.get('randomize', True)
+seed = params.get('seed', None)
+
+# load labels and resolve inconsistencies by mapping to full 400 labels
+labels_400 = [label.replace(' ','') for idx, label in np.genfromtxt(context_dir + '/labels.txt', delimiter=':', dtype=None)]
+print labels_400
+labels_59 = [label.replace(' ','') for idx, label in np.genfromtxt(context_dir + '/59_labels.txt', delimiter=':', dtype=None)]
+print labels_59
+for main_label, task_label in zip(('table', 'bedclothes', 'cloth'), ('diningtable', 'bedcloth', 'clothes')):
+    labels_59[labels_59.index(task_label)] = main_label
+print labels_59
+# load indices for images and labels
+split_f  = '{}/ImageSets/Main/{}.txt'.format(voc_dir,split)
+indices = open(split_f, 'r').read().splitlines()
+idx = 0
+
+# make eval deterministic
+if 'train' not in split:
+    random = False
+
+"""
+Load label image as 1 x height x width integer array of label indices.
+The leading singleton dimension is required by the loss.
+The full 400 labels are translated to the 59 class task labels.
+"""
+label_400 = scipy.io.loadmat('{}/trainval/{}.mat'.format(context_dir, indices[idx]))['LabelMap']
+print indices[idx]
+print label_400
+label = np.zeros_like(label_400, dtype=np.uint8)
+print label
+for idx, l in enumerate(labels_59):
+    idx_400 = labels_400.index(l) + 1
+    label[label_400 == idx_400] = idx + 1
+label = label[np.newaxis, ...]
+print label
+```
+
+- 通过打印输出可以得出结论: 将459类映射为59类的标签数据, 所以在制作自己的数据集的label的时候直接返回自己的标签就可以了, 不用这些处理, 更改后的net.py文件如下: 仅供参考
+
+```python
+import caffe
+import numpy as np
+from PIL import Image
+import scipy.io
+import random
+
+class PASCALContextSegDataLayer(caffe.Layer):
+
+    def setup(self, bottom, top):
+
+        # config
+        params = eval(self.param_str)
+        self.voc_dir = params['voc_dir']
+        self.context_dir = params['context_dir']
+        self.split = params['split']
+        self.mean = np.array((104.007, 116.669, 122.679), dtype=np.float32)
+        self.random = params.get('randomize', True)
+        self.seed = params.get('seed', None)
+
+        # load labels and resolve inconsistencies by mapping to full 111 labels
+        self.labels_111 = [label.replace(' ','') for idx, label in np.genfromtxt(self.context_dir + '/labels.txt', delimiter=':', dtype=None)]
+
+        # two tops: data and label
+        if len(top) != 2:
+            raise Exception("Need to define two tops: data and label.")
+        # data layers have no bottoms
+        if len(bottom) != 0:
+            raise Exception("Do not define a bottom.")
+
+        # load indices for images and labels
+        split_f  = '{}/ImageSets/Main/{}.txt'.format(self.voc_dir,
+                self.split)
+        self.indices = open(split_f, 'r').read().splitlines()
+        self.idx = 0
+
+        # make eval deterministic
+        if 'train' not in self.split:
+            self.random = False
+
+        # randomization: seed and pick
+        if self.random:
+            random.seed(self.seed)
+            self.idx = random.randint(0, len(self.indices)-1)
+
+    def reshape(self, bottom, top):
+        # load image + label image pair
+        self.data = self.load_image(self.indices[self.idx])
+        self.label = self.load_label(self.indices[self.idx])
+        # reshape tops to fit (leading 1 is for batch dimension)
+        top[0].reshape(1, *self.data.shape)
+        top[1].reshape(1, *self.label.shape)
+
+    def forward(self, bottom, top):
+        # assign output
+        top[0].data[...] = self.data
+        top[1].data[...] = self.label
+
+        # pick next input
+        if self.random:
+            self.idx = random.randint(0, len(self.indices)-1)
+        else:
+            self.idx += 1
+            if self.idx == len(self.indices):
+                self.idx = 0
+
+    def backward(self, top, propagate_down, bottom):
+        pass
+
+    def load_image(self, idx):
+        """
+        Load input image and preprocess for Caffe:
+        - cast to float
+        - switch channels RGB -> BGR
+        - subtract mean
+        - transpose to channel x height x width order
+        """
+        im = Image.open('{}/JPEGImages/{}.jpg'.format(self.voc_dir, idx))
+        in_ = np.array(im, dtype=np.float32)
+        in_ = in_[:,:,::-1]
+        in_ -= self.mean
+        in_ = in_.transpose((2,0,1))
+        return in_
+
+    def load_label(self, idx):
+
+        label_111 = scipy.io.loadmat('{}/trainval/{}.mat'.format(self.context_dir, idx))['LabelMap']
+
+        return label_111
+
+```
+
+### **训练模型**
+
+1. 运行`net.py`生成`train.prototxt`和`val.prototxt`
+
+2. 可以更改`solver.prototxt`更改训练策略, 运行`solve.py`训练模型
+
+
+## **相关资料**
 
 1. [OCR论文集](https://handong1587.github.io/deep_learning/2015/10/09/ocr.html)
 

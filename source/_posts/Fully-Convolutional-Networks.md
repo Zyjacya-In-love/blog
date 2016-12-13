@@ -12,6 +12,12 @@ FCN是深度学习应用在图像分割的代表作, 是一种端到端(end to e
 
 <!--more-->
 
+> [论文 : Fully Convolutional Networks for Semantic Segmentation](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf)
+
+> [FCN代码及模型](https://github.com/shelhamer/fcn.berkeleyvision.org)
+
+> [FCN模型结构](http://ethereon.github.io/netscope/#/gist/126e8d978afb58392024a3847da6e37b)
+
 ### **基本概念**
 
 图像分割以的分类:
@@ -30,9 +36,6 @@ FCN对图像进行像素级的分类，从而解决了语义级别的图像分�
 
 - 上图是语义分割所采用的全卷积网络(FCN)的结构示意图
 
-> [论文 : Fully Convolutional Networks for Semantic Segmentation](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf)
-> [FCN代码及模型](https://github.com/shelhamer/fcn.berkeleyvision.org)
-> [FCN模型结构](http://ethereon.github.io/netscope/#/gist/126e8d978afb58392024a3847da6e37b)
 
 ### **全卷积网络**
 
