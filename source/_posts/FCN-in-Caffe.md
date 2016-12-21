@@ -8,7 +8,7 @@ categories:
 date: 2016-11-25 10:18:36
 ---
 
-在学习了FCN之后特别地兴奋, 也许这就是网络结构的创意带来的思路上的刺激感吧, 于是开始跑一个FCN试试, 选来选去还是觉得 [Siftflow-fcn8s](https://github.com/shelhamer/fcn.berkeleyvision.org) 比较靠谱, 一个是数据量适当, 另一个是训练任务比较适合现在正在做的事情, 于是训练了一下官方demo, 之后又训练了Pascal-context的任务
+在学习了FCN之后特别地兴奋, 也许这就是网络结构的创意带来的思路上的刺激感吧, 于是开始跑一个FCN试试, 还是觉得 [Siftflow-fcn8s](https://github.com/shelhamer/fcn.berkeleyvision.org) 比较靠谱, 一个是数据量适当, 另一个是训练任务比较适合现在正在做的事情, 于是训练了一下官方demo, 之后又训练了Pascal-context的任务
 
 <!--more-->
 
