@@ -14,6 +14,8 @@ date: 2016-11-25 10:18:36
 
 > 理论部分参考我的另一篇文章: [Fully Convolutional Networks](http://simtalk.cn/2016/11/01/Fully-Convolutional-Networks/)
 
+> 原论文 : [Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/abs/1411.4038)
+
 ## **siftflow-fcn8s**
 
 ### **网络结构**
@@ -351,7 +353,7 @@ if __name__ == '__main__':
 
 ```
 
-- 注意在`Fine-tuning`(微调)一个网络的时候, 由于`output_num`已经改变用来适应自己的任务, 所以要将所有含有`output_num`发生改变的层重命名
+- 注意在`Fine-tuning`(微调)一个网络的时候, 由于`output_num`已经改变, 要将所有含有`output_num`发生改变的层重命名, 原因是在我们下载的caffemodel中已经包含原有的层名称, 而在`.prototxt`中我们更改了输出参数, 在加载caffemodel时, 如果层名称一样但是数据结构不同, 就会报错, 重命名之后模型中原有的层会被忽略继而使用我们自己定义的新的层
 
 ### **solver.prototxt**
 
