@@ -14,6 +14,8 @@ date: 2016-12-20 19:26:51
 
 看了极客头条的 [基于Spark的异构分布式深度学习平台](http://geek.csdn.net/news/detail/58867)文章特别期待Spark on Paddle,  [相关视频](https://spark-summit.org/2016/events/scalable-deep-learning-platform-on-spark-in-baidu/)
 
+> [Paddle源码浏览](http://162.243.141.242/paddle_html/codebrowser/codebrowser/paddle/)
+
 ### **Docker install**
 
 毫无疑问用docker安装最为方便, 由于我的云主机支持`AVX`, 所以就安装`cpu-demo-latest`版的Paddle
@@ -25,8 +27,6 @@ date: 2016-12-20 19:26:51
 2. 创建Paddle容器
 
    `docker run -i -t -d -P --name paddle -v /home/shang:/home/ paddle:shangyan`
-
-[源码浏览](http://162.243.141.242/paddle_html/codebrowser/codebrowser/paddle/)
 
 3. 在容器中安装anaconda, 然后更新镜像
 
@@ -85,13 +85,18 @@ sudo docker run ${CUDA_SO} ${DEVICES} --privileged=true -i -t -d -P --name paddl
 4. `./predict.sh`预测: 训练好的参数保存在`./cifar_vgg_model/`
 
   ```bash
-  model=cifar_vgg_model/pass-00299/
+  model=cifar_vgg_model/pass-00175/
   image=data/cifar-out/test/airplane/seaplane_s_000978.png
   use_gpu=1
   python prediction.py $model $image $use_gpu
   ```
 
-  - the model of the `300-th` pass is stored at `./cifar_vgg_model/pass-00299`
+  输出结果为:
+
+  ```
+  I1222 00:49:44.455191   464 GradientMachine.cpp:123] Loading parameters from cifar_vgg_model/pass-00175/
+  [INFO 2016-12-22 00:49:44,553 prediction.py:137] Label of data/cifar-out/test/airplane/seaplane_s_000978.png is: 2
+  ```
 
 ### **ResNet**
 

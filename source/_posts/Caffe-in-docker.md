@@ -130,6 +130,18 @@ categories:
 
 - Host上的驱动和容器内的驱动不一致
 
+> 这里详细讲一下, 关于驱动问题:
+
+之前为了方便在启用docker的时候使用`--privileged=true`将所有的host权限打开, 这就导致在容器中可以检测到host的驱动, 这时候容器内可以不安装驱动的, 但是如果我们需要一个更加独立的容器的话, 就需要在容器里安装驱动, 同时要保证容器中有可用的kernel, 这样我们只将GPU硬件穿透进容器就可以了
+
+1. 检查`/usr/src/kernels`下面有没有安装可用的kernel
+
+2. 下载`NVIDIA驱动`, `chmod u+x NVIDIA-Linux-x86_64-367.57.run`赋予运行权限, `./NVIDIA-Linux-x86_64-367.57.run`安装驱动, `nvidia-smi`检查是否安装成功
+
+3. 这样在启动docker的时候只要将GPU挂载到容器上就可以了, 参考如下命名:
+
+`sudo docker run -i -t -d -P --device=/dev/nvidia0 --device=/dev/nvidia1 --device=/dev/nvidia2 --name pascal_shangyan -v /home/shang:/home/ registry.cn-hangzhou.aliyuncs.com/shang/caffe:pascal`
+
 ### **GPU设置**
 
 1. 需要使用GPU的用户，最好先检查物理机上的GPU状态是否正常，运行：
