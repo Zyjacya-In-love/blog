@@ -69,7 +69,7 @@ CNN的强大之处在于它的多层结构能自动学习特征，并且可以�
 
 1. 对于任一个卷积层，都存在一个能实现和它一样的前向传播函数的全连接层。权重矩阵是一个巨大的矩阵，除了某些特定块，其余部分都是零。而在其中大部分块中，元素都是相等的。
 
-2. 任何全连接层都可以被转化为卷积层。比如VGG16中第一个全连接层是$25088\*4096$的，将之解释为$512\*7\*7\*4096$的卷积核，即一个$ K=4096 $的全连接层，输入数据体的尺寸是$ 7\*7\*512$，这个全连接层可以被等效地看做一个$ F=7,P=0,S=1,K=4096 $的卷积层。换句话说，就是将滤波器的尺寸设置为和输入数据体的尺寸一致$7\*7$, 这样输出就变为$1\*1\*4096$, 本质上和全连接层的输出是一样的
+2. 任何全连接层都可以被转化为卷积层。比如VGG16中第一个全连接层是$25088\*4096$的数据尺寸，将它转化为$512\*7\*7\*4096$的数据尺寸，即一个$ K=4096 $的全连接层，输入数据体的尺寸是$ 7\*7\*512$，这个全连接层可以被等效地看做一个$ F=7,P=0,S=1,K=4096 $的卷积层。换句话说，就是将滤波器的尺寸设置为和输入数据体的尺寸一致$7\*7$, 这样输出就变为$1\*1\*4096$, 本质上和全连接层的输出是一样的
 
   - 输出激活数据体深度是由卷积核的数目决定的(`K=4096`)
   
@@ -100,6 +100,7 @@ CNN的强大之处在于它的多层结构能自动学习特征，并且可以�
 如下图所示，FCN将传统CNN中的全连接层转化成卷积层，对应CNN网络FCN把最后三层全连接层转换成为三层卷积层 :
 
 ![](\img\Fully-Convolutional-Networks\becomeFCN.png)
+![](\img\Fully-Convolutional-Networks\net1.png)
 
 1. 全连接层转化为全卷积层 : 在传统的CNN结构中，前5层是卷积层，第6层和第7层分别是一个长度为4096的一维向量，第8层是长度为1000的一维向量，分别对应1000个不同类别的概率。FCN将这3层表示为卷积层，卷积核的大小 (通道数，宽，高) 分别为 (4096,1,1)、(4096,1,1)、(1000,1,1)。看上去数字上并没有什么差别，但是卷积跟全连接是不一样的概念和计算过程，使用的是之前CNN已经训练好的权值和偏置，但是不一样的在于权值和偏置是有自己的范围，属于自己的一个卷积核
 
@@ -111,21 +112,32 @@ CNN的强大之处在于它的多层结构能自动学习特征，并且可以�
 
 ### **反卷积层**
 
-upsampling的操作可以看成是反卷积(deconvolutional)，卷积运算的参数和CNN的参数一样是在训练FCN模型的过程中通过bp算法学习得到。反卷积层也是卷积层，不关心input大小，滑窗卷积后输出output。
+Upsampling的操作可以看成是反卷积(deconvolutional)，卷积运算的参数和CNN的参数一样是在训练FCN模型的过程中通过bp算法学习得到。反卷积层也是卷积层，不关心input大小，滑窗卷积后输出output。deconv并不是真正的deconvolution（卷积的逆变换），最近比较公认的叫法应该是transposed convolution，deconv的前向传播就是conv的反向传播。
+
+- 反卷积参数: 利用卷积过程filter的转置（实际上就是水平和竖直方向上翻转filter）作为计算卷积前的特征图
+- 反卷积学习率为$0$
+
+[Ways for Visualizing Convolutional Networks](http://buptldy.github.io/2016/09/25/2016-09-25-cnn_vis/)
 
 反卷积的运算如下所示:
 
-**蓝色是反卷积层的input，绿色是反卷积层的output**
+**蓝色是反卷积层的input，绿色是反卷积层的output**Full padding, transposed
+
+**Full padding, transposed**
 
 ![](\img\Fully-Convolutional-Networks\deconv1.gif)
 
 - 上图中$kernel size = 3, stride = 1, padding = 2$的反卷积，input是2×2, output是4×4
 
+**Zero padding, non-unit strides, transposed**
+
 ![](\img\Fully-Convolutional-Networks\deconv2.gif)
 
-- 上图中$kernel size = 3, stride = 2, padding = 2$的反卷积，input是3×3, output是5×5
+- 上图中$kernel size = 3, stride = 2, padding = 1$的反卷积，input feature map是3×3, 转化后是5×5, output是5×5
 
-**注意:** 这里的padding可以理解为`间隔填充`
+**注意:** :
+
+[A guide to convolution arithmetic for deep learning](https://arxiv.org/abs/1603.07285)
 
 > 怎么使反卷积的output大小和输入图片大小一致，从而得到`pixel level prediction`?
 

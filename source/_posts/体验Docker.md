@@ -334,7 +334,7 @@ Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在�
  
  - 将上述文件保存为`docker-enter`, 并`sudo chmod +x docker-enter`
  
- `docker-enter 12d1f3b84922`
+ `docker-enter 12d1f3b84922` 或者 `sudo ./docker-enter 12d1f3b84922`
  
  - `12d1f3b84922`是容器ID , 进入容器
  
