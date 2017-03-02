@@ -1,5 +1,5 @@
 ---
-title: Caffe模型解析
+title: Caffe框架解析
 toc: true
 tags:
   - Blobs
@@ -79,10 +79,9 @@ Layer是基本的计算单元, 其定义了每一层基本形式, 是计算单�
 
 **代码结构**
 
-`layer.hpp`是抽象出来的基类，其他都是在其基础上的继承, 其相关头文件如下:
+`layer.hpp`是抽象出来的基类，其他都是在其基础上的继承, 在Layer的基础上衍生出来的有5种Layers：:
 
 ```c++
-layer.hpp
 common_layers.hpp
 data_layers.hpp
 loss_layers.hpp
@@ -163,7 +162,4 @@ Net::Init()进行模型的初始化。
 1. 创建 blobs 和 layers 以搭建整个网络 DAG 图，以及调用 layers 的 SetUp()函数。
 
 2. 初始化时也会做另一些记录，例如确认整个网络结构的正确与否等。另外，初始化期间，Net 会打印其初始化日志到 INFO 信息中。
-
-
-
 

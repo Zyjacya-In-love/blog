@@ -1,5 +1,5 @@
 ---
-title: Backpropagation
+title: Back Propagation
 date: 2016-09-07 15:29:19
 toc: true
 tags:
