@@ -5,11 +5,11 @@ tags:
   - C++
   - Caffe
 categories:
-  - Caffe源码
-date: 2017-03-02 18:24:45
+  - 笔记
+date: 2017-01-02 18:24:45
 ---
 
-阅读Caffe源码过程中的C++学习笔记
+阅读Caffe源码过程中的C++学习笔记, 大部分内容来自其他人博客, 趁着学习Caffe源码也学习一下C++的特性
 
 <!--more-->
 
@@ -208,6 +208,7 @@ int main(void)
 - 抽象类是不能定义对象的。
 
 总结：
+
 1、纯虚函数声明如下： virtual void funtion1()=0; 纯虚函数一定没有定义，纯虚函数用来规范派生类的行为，即接口。包含纯虚函数的类是抽象类，抽象类不能定义实例，但可以声明指向实现该抽象类的具体类的指针或引用。
 2、虚函数声明如下：virtual ReturnType FunctionName(Parameter)；虚函数必须实现，如果不实现，编译器将报错，错误提示为：
 error LNK****: unresolved external symbol "public: virtual void __thiscall ClassName::virtualFunctionName(void)"
@@ -223,6 +224,48 @@ error LNK****: unresolved external symbol "public: virtual void __thiscall Class
 实际上我个人认为纯虚函数的引入，是出于两个目的
 1、为了安全，因为避免任何需要明确但是因为不小心而导致的未知的结果，提醒子类去做应做的实现。
 2、为了效率，不是程序执行的效率，而是为了编码的效率。
+
+**C++中虚析构函数的作用**
+
+C++开发的时候，用来做基类的类的析构函数一般都是虚函数。可是，为什么要这样做呢？
+
+```c++ 
+class ClxBase
+{
+public:
+    ClxBase() {};
+    virtual ~ClxBase() {}; //虚析构函数
+
+    virtual void DoSomething() { cout << "Do something in class ClxBase!" << endl; };
+};
+
+class ClxDerived : public ClxBase
+{
+public:
+    ClxDerived() {};
+    ~ClxDerived() { cout << "Output from the destructor of class ClxDerived!" << endl; }; 
+
+    void DoSomething() { cout << "Do something in class ClxDerived!" << endl; };
+};
+```
+主函数:
+
+```c++
+ClxBase *pTest = new ClxDerived;
+pTest->DoSomething();
+delete pTest;
+```
+输出结果:
+
+`Do something in class ClxDerived!`
+`Output from the destructor of class ClxDerived!`
+
+如果把类ClxBase析构函数前的virtual去掉，那输出结果就是：
+
+`Do something in class ClxDerived!`
+
+也就是说，类ClxDerived的析构函数根本没有被调用！一般情况下类的析构函数里面都是释放内存资源，而析构函数不被调用的话就会造成内存泄漏。所以虚析构函数做是为了`当用一个基类的指针删除一个派生类的对象时，派生类的析构函数会被调用, 从而释放内存空间。
+当然，并不是要把所有类的析构函数都写成虚函数。因为当类里面有虚函数的时候，编译器会给类添加一个虚函数表，里面来存放虚函数指针，这样就会增加类的存储空间。所以，只有当一个类被用来作为基类的时候，才把析构函数写成虚函数。
 
 ### **explicit**
 
@@ -270,27 +313,103 @@ class String {
 String s2 ( 10 );   //OK 分配10个字节的空字符串
 String s3 = String ( 10 ); //OK 分配10个字节的空字符串
  
-下面两种写法就不允许了：
+//下面两种写法就不允许了：
 String s4 = 10; //编译不通过，不允许隐式的转换
 String s5 = ‘a’; //编译不通过，不允许隐式的转换
 ```
-
 因此，某些时候，explicit 可以有效得防止构造函数的隐式转换带来的错误或者误解
 
-- explicit   只对构造函数起作用，用来抑制隐式转换。如：   
+explicit只对构造函数起作用，用来抑制隐式转换。
+
+如：  
+ 
 ```c++
-  class A{   
-      A(int a);   
-  };   
-  int Function(A a);   
-```    
+class A{   
+  A(int a);   
+};   
+int Function(A a);      
+
 当调用 Function(2)的时候，2会隐式转换为A类型。这种情况常常不是程序员想要的结果，所以，要避免之，就可以这样写：   
-```c++    
-  class A{   
-      explicit A(int a);   
-  };   
-  int Function(A a);   
-```    
+  
+class A{   
+  explicit A(int a);   
+};   
+int Function(A a);  
+```
+
 这样，当调用`Function(2)`的时候，编译器会给出错误信息（除非`Function`有个以`int`为参数的重载形式），这就避免了在程序员毫不知情的情况下出现错误。
 
 **总结：`explicit`只对构造函数起作用，用来抑制隐式转换。**
+
+### **inline**
+
+下面的函数，函数体中只有一行语句： 
+```c++
+double Average(double total, int number){ 
+  return total/number;
+}
+```
+
+这么简单的语句为什么要定义为一个函数呢?第一，它使程序更可读；第二，它使这段代码可以重复使用。但是，它也有缺点：当它被频繁地调用的时候，由于调用函数的开销，使得应用程序的时间效率很低
+
+为了避免函数调用的开销, 对于上面的函数把它定义为内联函数的形式：
+```c++
+inline double Average(double total, int number){
+  return total/number;
+}
+```
+函数的引入可以减少程序的目标代码，实现程序代码的共享。函数调用需要时间和空间开销，调用函数实际上将程序执行流程转移到被调函数中，被调函数的代码执行完后，再返回到调用的地方。这种调用操作要求调用前保护好现场并记忆执行的地址，返回后恢复现场，并按原来保存的地址继续执行。对于较长的函数这种开销可以忽略不计，但对于一些函数体代码很短，又被频繁调用的函数，就不能忽视这种开销。引入内联函数正是为了解决这个问题，提高程序的运行效率。
+
+在程序编译时，编译器将程序中出现的内联函数的调用表达式用内联函数的本体来进行替换。由于在编译时将内联函数体中的代码替代到程序中，因此会增加目标程序代码量，进而增加空间开销，而在时间开销上不象函数调用(函数调用有栈内存创建和释放的开销)时那么大，可见它是以目标代码的增加为代价来换取时间的节省。
+
+**总结：inline函数是提高运行时间效率，但却增加了空间开销。即inline函数目的是：为了提高函数的执行效率(速度)。**
+
+关键字inline必须与函数定义体放在一起才能使函数真正内联，仅把inline放在函数声明的前面不起任何作用。因为inlin是一种用于实现的关键字，不是一种用于声明的关键字。许多书籍把内联函数的声明、定义体前都加了inline关键字，但声明前不应该加(加不加不会影响函数功能)，因为声明与定义不可混为一谈。
+
+使用内联函数时应注意以下几个问题：
+（1） 在一个文件中定义的内联函数不能在另一个文件中使用。它们通常放在头文件中共享。
+（2） 内联函数应该简洁，只有几个语句，如果语句较多，不适合于定义为内联函数。 
+（3） 内联函数体中，不能有循环语句、if语句或switch语句，否则，函数定义时即使有inline关键字，编译器也会把该函数作为非内联函数处理。
+（4） 内联函数要在函数被调用之前声明。
+
+例如：
+```c++
+#include <iostream.h>
+int increment(int i);
+inline int increment(int i){
+  i++; return i;
+}
+void main(void){  ……
+}
+```
+如果我们修改一下程序，将内联函数的定义移到main()之后：
+```c++
+#include <iostream.h>
+int increment(int i);
+void main(void){  ……
+}
+内联函数定义放在main()函数之后
+inline int increment(int i){
+  i++; return i;
+}
+```
+
+内联函数在调用之后才定义，这段程序在编译的时候编译器不会直接把它替换到main中。也就是说实际上"increment(int i)"只是作为一个普通函数被调用，并不具有内联函数的性质，无法提高运行效率
+
+### **`#`和`##`**
+
+`#`是字符串化的意思，出现在宏定义中的#是把跟在后面的参数转成一个字符串；
+
+```c++ 
+#define  strcpy__(dst, src)      strcpy(dst, #src)
+     
+strcpy__(buff,abc)  //相当于 strcpy__(buff,“abc”)
+```
+
+`##`是连接符号，把参数连接在一起:
+
+```c++ 
+#define FUN(arg)  my##arg
+
+FUN(ABC)  //等价于FUN(myABC)  
+```
