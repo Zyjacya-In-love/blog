@@ -1,5 +1,5 @@
 ---
-title: C++ in Caffe
+title: Effective C++ in Caffe
 toc: true
 tags:
   - C++
@@ -9,7 +9,7 @@ categories:
 date: 2017-01-02 18:24:45
 ---
 
-阅读Caffe源码过程中的C++学习笔记, 大部分内容来自其他人博客, 趁着学习Caffe源码也学习一下C++的特性
+阅读Caffe源码过程中的C++学习笔记, 大部分内容来自其他人博客, 趁着学习Caffe源码也学习一下C++的特性, 结合`Effective C++`那本书, 寻找那本书中的条款在Caffe源码中的应用, 逐渐的补充这篇文章
 
 <!--more-->
 

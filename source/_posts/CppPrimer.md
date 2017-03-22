@@ -14,6 +14,18 @@ categories:
 
 <!--more-->
 
+> 优秀博文:
+
+- [C/C++内存管理详解](http://chenqx.github.io/2014/09/25/Cpp-Memory-Management/)
+
+- [C++类型安全](http://www.cnblogs.com/Joe-BM/articles/2613245.html)
+
+- [关于C++虚函数表的那些事儿](http://www.cnblogs.com/webary/p/4731457.html)
+
+- [struct/class等内存字节对齐问题详解](http://www.cnblogs.com/webary/p/4754522.html)
+
+- [C++：在堆上创建对象，还是在栈上？](https://www.devbean.net/2014/02/cpp-create-object-on-heap-or-stack/)
+
 ### **引用与指针**
 
 引用是C++中的概念，程序中，n是m的一个引用（reference），m是被引用物（referent）。 
