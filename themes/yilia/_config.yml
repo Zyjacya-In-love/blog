@@ -56,7 +56,7 @@ tagcloud: true
 #不开启——
 #aboutme: false
 #开启——
-aboutme: 北邮在读，计算机视觉与机器学习，正在实践特定文字识别和文本分类。
+aboutme: 北邮在读，计算机视觉与深度学习，研究复杂场景中的文本检测与识别。
 #是否开启友情链接
 #不开启——
 friends: false

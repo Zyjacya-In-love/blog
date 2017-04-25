@@ -25,6 +25,7 @@ categories:
 - [struct/class等内存字节对齐问题详解](http://www.cnblogs.com/webary/p/4754522.html)
 
 - [C++：在堆上创建对象，还是在栈上？](https://www.devbean.net/2014/02/cpp-create-object-on-heap-or-stack/)
+- [C++总结：C++中的const和constexpr](http://www.cnblogs.com/fuzhe1989/p/3554345.html)
 
 ### **引用与指针**
 
