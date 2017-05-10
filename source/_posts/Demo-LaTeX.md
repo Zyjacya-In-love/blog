@@ -15,6 +15,34 @@ categories:
 > 本篇博客的[Markdown文件](https://github.com/Simshang/blog/blob/master/source/_posts/Demo-LaTeX.md)
 > **转义问题**: 多个`_`或者`*`会和markdown渲染冲突, 需要`\`对每个`_`或者`*`进行转义, 显示`{`需要`\\{`来转义
 
+### **关键字索引**
+
+`\` 或者`~`: 空格
+
+`\verb +text+ ` : 直接打印不执行任何LATEX命令。这里的+仅是分隔符的一个例子, 除了* 或空格，可以使用任意一个字符。
+
+`\url{www.baidu.com}` : 嵌入超链接, 可在文档中点击访问
+
+`\emph{text}` : 强调的内容
+
+`\section{...}` : 章
+
+`\subsection{...}` : 节
+
+`\subsubsection{...}` : 子节
+
+`\paragraph{...}` : 段落
+
+`\subparagraph{...}` : 子段落
+
+``text'` : 单引号
+
+```text''` : 双引号引起来的text
+
+`--` : 折线
+
+
+
 ### **基本概念**
 
 - 控制序列: 以`\`开头,参数：`必须参数{}`和`可选参数[]`
