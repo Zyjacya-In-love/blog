@@ -16,7 +16,7 @@ date: 2017-07-03 20:19:46
 
 [**Visual Object Tracking using Adaptive Correlation Filters** (PDF)](http://www.cs.colostate.edu/~vision/publications/bolme_cvpr10.pdf)
 
-Minimum Output Sum of Squared Error(MOSSE)是第一篇将correlation filter（CF）引入object tracking的论文，是CSK和DAT等算法的基础。首先我们来看一下CF的概念，
+Minimum Output Sum of Squared Error(MOSSE)是第一篇将correlation filter（CF）引入object tracking的论文，是CSK和KCF/DCF等算法的基础。首先我们来看一下CF的概念，
 
 > **CF**(相关滤波)
 
@@ -88,6 +88,11 @@ $$
 
 其中，$\eta$是一个超参数，为经验值。
 
+> 缺点：
+
+- 输入的特征为单通道灰度图像，特征表达能力有限
+
+- 没有尺度更新，对于尺度变化的跟踪目标不敏感
 
 ### **CSK**(2012)
 
@@ -103,7 +108,7 @@ $$
   
   - 引入循环矩阵实现了密集采样，从而实现了整张图片特征的提取
 
-  - 在MOSSE中通过训练滤波模板得到一个线性二分类器，CSK中通过`引入核函数的方式`将分类器变为非线性二分类器，解决了低维线性不可分或者非线性可分的情况，从而使得分类器在丰富的高维特征空间中起作用。（核函数的本质就是通过映射关系将特征从低维空间映射到高维空间，从而将低维空间中的不可分变为在高维空间中的可分）。
+  - 在MOSSE中通过训练滤波模板得到一个线性回归模型，CSK中通过`引入核函数的方式`将分类器变为非线性回归模型，解决了低维线性不可分或者非线性可分的情况，从而使得分类器在丰富的高维特征空间中起作用。（核函数的本质就是通过映射关系将特征从低维空间映射到高维空间，从而将低维空间中的不可分变为在高维空间中的可分）。
   
 > 引入核方法后的数学模型的数学表达为：
 
@@ -174,6 +179,14 @@ $$ X^HX = F\cdot diag(\hat{x} \odot \hat{x}^\*)\cdot F^H = C(F^{-1}(\hat{x} \odo
 
 在核方法方面的提速，前面我们提到，在RLS的基础上，我们引入了核函数方法，最后将求解$w$的问题转化为求解$\alpha$的问题，同时在某些特定的条件（K is a unitarily invariant kernel，Particular examples are the polynomial and Gaussian kernels.）下，Kernel Matrix也是循环矩阵，这样我们依然可以像在线性回归部分一样将核矩阵用向量表示，通过向量的计算减少运算量进而提高性能。
 
+> 缺点：
+
+- 采用单通道的灰度特征，特征表达能力有限
+
+- 引入循环卷积导致产生边际效应
+
+- 没有尺度更新，对尺度变化不敏感
+
 ### **KCF/DCF**(2014)
 
 [**High-Speed Tracking with Kernelized Correlation Filters**(PDF)](https://arxiv.org/abs/1404.7584)
@@ -196,7 +209,9 @@ $$ k^{xx^{'}} = F^{-1} (\sum_c \hat{x_c}^\* \odot \hat{x_c}') $$
 
 > 缺点：
 
-关于边际效应
+- KCF引入高斯核方法之后，速度下降了46.46%，性能仅提高了0.21%
+
+- 对尺度变化不敏感
 
 ### **CN** (2014)
 
@@ -221,13 +236,15 @@ CSK, KCF/DCF和CN，区别主要在于有没有Kernel trick和用什么特征（
 
   ![](/img/Object-Tracking/cn1.png)
 
-- HOG是梯度特征，而CN是颜色特征，两者可以互补，HOG+CN在近两年的跟踪算法中成为了hand-craft特征标配
+- HOG是梯度特征，而CN是颜色特征，两者可以互补，HOG+CN在近两年的跟踪算法中成为了人工特征提取的标配
 
 
 
 > 缺点：
 
-- 对尺度变化，快速运动，刚性形变等视频跟踪效果不佳
+- 对尺度变化不敏感
+
+- 对于快速颜色变化不敏感
 
 ### **DAT**(2015)
 
@@ -275,6 +292,8 @@ $$ P(x \in O|b_x) = \lambda_p P(x \in O|O,D,b_x) + (1-\lambda_p)P(x \in O|O,S,b_
 
 > 缺点：
 
+- 对于颜色快速变化不敏感
+
 ### **DSST&fDSST**(2016)
 
 [**Discriminative Scale Space Tracker**（PDF）](https://arxiv.org/pdf/1609.06141.pdf)-[**Project Page**](http://www.cvl.isy.liu.se/research/objrec/visualtracking/scalvistrack/index.html)
@@ -312,6 +331,12 @@ $$ P(x \in O|b_x) = \lambda_p P(x \in O|O,D,b_x) + (1-\lambda_p)P(x \in O|O,S,b_
  
 - 通过PCA降维来减少特征维度，利用奇异值分解得到PCA变换矩阵，源代码中将维度最大化压缩从744维到17维，通过降维得到的模型矩阵只有$17 \times 17$(17个尺度和17特征维度)大小，从而获得了极大加速
 
+> 缺点：
+
+- 对于快速形变和遮挡不敏感
+
+- 循环卷积产生的边际效应
+
 ### **Staple**(2016)
 
 [**Staple: Complementary Learners for Real-Time Tracking**（PDF）](https://arxiv.org/abs/1512.01355)-[**Project Page**](http://www.robots.ox.ac.uk/~luca/staple.html)
@@ -343,13 +368,13 @@ $$f\_{tmpl}(x;h)=\sum\_{u \in \mathcal{T}}h[u]^T \phi \_x[u]$$
 
 - $h$为滤波模型的参数
 - $\phi _x$为图像梯度特征
-- $\mathcal{T} \in \mathbb{Z}^2$为有限的网格(Finite Grid)，可以理解为图像中某一像素的位置坐标(x,y)
+- $\mathcal{T} \in \mathbb{Z}^2$为二维多通道特征图
 
 $$ f\_{hist}(x;\beta)=\beta ^T(\frac 1 {\lvert \mathcal{H} \rvert}\sum \_{u\in \mathcal{H}} \psi \_x[u]) $$
 
 - $\beta$为贝叶斯分类模型的参数
 - $\psi _x$为图像的颜色直方图特征
-- $\mathcal{H}$为有限的网格(Finite Grid)
+- $\mathcal{H}$为二维多通道彩色图像
 
 令整个模型的参数为$\theta =(h,\beta)$，则整个Staple算法的数学模型表示为为：
 
@@ -376,6 +401,10 @@ $$ h\_t=argmin\_h \{L\_{tmpl}(h;X\_t)+\frac 1 2 \lambda \_{tmpl} \lVert h \rVert
 
 $$ \beta \_t=argmin\_{\beta} \{L\_{hist}(\beta;X\_t)+\frac 1 2 \lambda \_{hist} \lVert \beta \rVert ^2 \} $$
 
+> 缺点：
+
+- 分别计算两个模型的结果然后进行融合，计算比较复杂
+
 ### **Summary**
 
 在整个系列的方法当中无非是从两方面进行优化，一方面是模型的优化，另一方面是特征的优化：
@@ -391,6 +420,20 @@ $$ \beta \_t=argmin\_{\beta} \{L\_{hist}(\beta;X\_t)+\frac 1 2 \lambda \_{hist} 
 - DSST在MOSSE的基础上扩展了尺度滤波器（Scale Filter）,fDSST通过降维的方式进行加速计算
 
 - Staple本质上就是DAT和DSST的模型输出结果进行融合
+
+> 各个算法对比表：
+
+|    算法   | 性能(FPS) |       特征表达      | 尺度变化 |
+|:---------:|:---------:|:-------------------:|:--------:|
+|   MOSSE   |    615    |      单通道灰度     |    No    |
+|    CSK    |    362    |      单通道灰度     |    No    |
+|    KCF    |    172    |      多通道HOG      |    No    |
+|    DCF    |    292    |      多通道HOG      |    No    |
+|     CN    |    152    |    ColorName特征    |    No    |
+| DAT(非CF) |   89.56   |      颜色直方图     |    No    |
+|    DSST   |    65.2   | fHOG特征+单通道灰度 |    Yes   |
+|   fDSST   |    86.1   | fHOG特征+多通道灰单 |    Yes   |
+|   Staple  |   121.2   |   颜色直方图+fHOG   |    Yes   |
 
 ### **Expectation**
 
