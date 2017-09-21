@@ -225,4 +225,8 @@ exec $DOCKER_BIN run \
 > [深度学习和HPC工具集用户手册](https://help.aliyun.com/document_detail/25848.html)
 
 
+- **解决在docker中安装驱动缺少对应版本的kernel**
 
+1. 在host中分别将`/usr/src/`和`/lib/modules/`下的对应的kernel拷贝到docker容器中的文件夹中，重新安装驱动就可以
+
+2. `sudo apt-get install linux*`安装对应的kernel
