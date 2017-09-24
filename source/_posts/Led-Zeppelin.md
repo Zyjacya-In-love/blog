@@ -3,7 +3,6 @@ title: Led Zeppelin
 date: 2016-05-07 17:38:41
 tags:
   - 摇滚
-  - 图说
 categories:
   - life
 ---

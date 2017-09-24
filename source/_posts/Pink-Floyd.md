@@ -2,7 +2,6 @@
 title: Pink Floyd
 tags:
   - 摇滚
-  - 图说
 categories:
   - life
 date: 2016-08-03 10:13:57
