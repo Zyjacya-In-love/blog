@@ -7,4 +7,5 @@ node_modules/*
 public/*
 .deploy*/
 .idea/
+.deploy_git/
 
