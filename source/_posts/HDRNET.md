@@ -5,7 +5,7 @@ tags:
   - 图像增强
 categories:
   - 深度学习
-date: 2018-02-05 15:42:43
+date: 2018-06-05 15:42:43
 ---
 
 本篇介绍一篇基于CNN的实时图像增强的方法, [Deep Bilateral Learning for Real-Time Image Enhancement](https://groups.csail.mit.edu/graphics/hdrnet/)

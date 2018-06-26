@@ -6,7 +6,7 @@ tags:
   - TensorFlow
 categories:
   - 深度学习
-date: 2018-01-12 06:25:54
+date: 2018-05-12 06:25:54
 ---
 
 本篇文章详细介绍了如何解析TensorFlow的训练参数然后另存为Caffe的Caffemodel。
