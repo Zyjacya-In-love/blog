@@ -12,6 +12,22 @@ date: 2016-10-23 19:23:06
 
 <!--more-->
 
+### **MacOS**
+
+依赖安装:
+
+[Caffe官方文档](http://caffe.berkeleyvision.org/install_osx.html)
+
+`mkdir build`
+
+- 创建`build`文件夹
+
+`cmake .. -DCMAKE_CXX_STANDARD=11 -DCPU_ONLY=ON`
+
+- 进入`build`执行`C++11`的编译CPU版本
+
+`make all -j8`
+
 ### **命令行**
 
 如果要执行caffe程序，都需要加` ./build/tools/ `前缀,

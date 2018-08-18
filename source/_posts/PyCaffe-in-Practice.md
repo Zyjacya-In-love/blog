@@ -12,6 +12,24 @@ date: 2016-10-28 14:53:12
 
 <!--more-->
 
+### **Build pyaffe**
+
+- make pycaffe
+
+- make distribute
+
+- 在Python中`import caffe` 设置环境变量:
+
+`vim .bashrc`
+
+`export PYTHONPATH="~/caffe_root_path/distribute/python:$PYTHONPATH"`
+
+- No Module Named caffe
+
+`export LD_LIBRARY_PATH="~/caffe_root_path/distribute/lib:$LD_LIBRARY_PATH"`
+
+- ImportError: libcaffe.so.1.0.0: cannot open shared object file: No such file or directory
+
 > 运行环境是我的caffe docker镜像, 见[shang/caffe](https://dev.aliyun.com/detail.html?spm=5176.1972343.2.22.7Ole2f&repoId=17725)
 
 ### **生成网络**

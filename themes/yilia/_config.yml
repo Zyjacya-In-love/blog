@@ -12,7 +12,7 @@ menu:
 subnav:
   github: "https://github.com/Simshang"
 #  linkedin: "https://www.linkedin.com/in/shangyan"
-  zhihu: "https://www.zhihu.com/people/shangyan"
+#  zhihu: "https://www.zhihu.com/people/shangyan"
 #  weibo: "https://www.weibo.com/shangyan88"
   mail: "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=l_T-9vnwue72_dfx_O-69v77ufT4_g"
   #gitlab: "https://gitlab.com/Simshang"
@@ -56,8 +56,8 @@ tagcloud: true
 #不开启——
 #aboutme: false
 #开启——
-aboutme: 北邮在读，计算机视觉与深度学习，喜欢摇滚乐，爱打篮球，极简主义。
-#aboutme: 腾讯在职，计算机视觉与深度学习，喜欢摇滚乐，爱打篮球，极简主义。
+aboutme: 技术研究，计算机视觉与深度学习，喜欢摇滚乐，爱打篮球，极简主义。
+
 #是否开启友情链接
 #不开启——
 friends: false
