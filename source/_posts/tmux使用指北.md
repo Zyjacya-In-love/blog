@@ -39,6 +39,10 @@ date: 2018-08-28 15:05:52
 
 `tmux kill-server` : 删除所有`session`
 
+`tmux rename-session -t sims sims-mbp` : 在系统中, 重命名sims为sims-mbp
+
+`A+ $` : 在session中, 重命名session
+
 `A+ d` : 退出当前会话, 通过attach可以回到该会话
 
 `A+ D` : 选择要退出的会话(多会话时)
