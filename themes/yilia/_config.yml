@@ -41,7 +41,8 @@ google_analytics: ''
 favicon: /favicon.png
 
 #你的头像url
-avatar: http://7xqkff.com1.z0.glb.clouddn.com/AIer.png
+avatar: https://avatars1.githubusercontent.com/u/9046958?s=460&amp;v=4
+
 #是否开启分享
 share_jia: false
 share_addthis: false
