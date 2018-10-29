@@ -19,6 +19,15 @@ date: 2018-10-22 11:31:53
 
 - `brew install python` : 安装Python
 
+### **brew 指定版本**
+
+如果之前使用`brew install protobuf`安装过`protobuf`,需要先执行`brew unlink protobuf`来'解绑'protobuf
+
+- 查找可用的protobuf版本` brew search protobuf`
+- 安装你需要的版本, 比如` brew install protobuf@3.1`
+- `brew link protobuf@3.1`, 如果报错执行`brew link --overwrite --force protobuf@3.1`
+- `protobuf -v`验证安装的protobuf版本
+
 ### **Caffe环境**
 
 在Mac下我们是用Cmake来构建Caffe的, 保证cmake安装正确:
